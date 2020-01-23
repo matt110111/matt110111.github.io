@@ -1,15 +1,15 @@
 let boids = [];
 let bW = 600;
-let bH = 750;
+let bH = 600;
 let bD = 600;
 let ot;
 
-
+let a;
 
 function setup() {
   createCanvas(bW, bH, WEBGL);
-
-  for (let i = 0; i < 200; i++) {
+  h1 = createElement("h1","Waiting..");
+  for (let i = 0; i < 500; i++) {
     boids.push(new Boid());
 
 
@@ -21,12 +21,13 @@ function setup() {
 
 function draw() {
   background(25);
-  //orbitControl();
+  orbitControl();
 
 
   boundary = new Box(300, 375, 300, bW / 2, bH / 2, bD / 2)
   //boundary.show()
-  ot = new Octree(boundary, 4, 0);
+  ot = new Octree(boundary, 16, 0);
+  h1.html(int(frameRate()));
   //ot.show();
   // push();
   // translate(0, 0, 0);
@@ -37,6 +38,7 @@ function draw() {
     let point = new Point(b.pos.x, b.pos.y, b.pos.z, b);
     ot.insert(point)
   }
+  //translate(-bW,-bH,-bD);
   //drawSub(ot)
   //noLoop();
 
@@ -45,7 +47,7 @@ function draw() {
   // noLoop();
   //rotateX(PI / 2.9);
 
-    translate(-width / 2, -height / 1.5 + 250,-100);
+  //translate(-width / 2, -height / 1.5 + 250, -100);
 
   for (let i = 0; i < boids.length; i++) {
     boids[i].edges();
@@ -59,8 +61,7 @@ function draw() {
 
 
 function drawSub(octree) {
-  if (octree.divided) {
-
+  if (octree.depth > 0) {
     octree.boxone.show()
     octree.boxtwo.show()
     octree.boxthr.show()
@@ -69,37 +70,38 @@ function drawSub(octree) {
     octree.boxsix.show()
     octree.boxsev.show()
     octree.boxeig.show()
-    if (octree.boxone.divided) {
-      // octree.boxone.show()
-      drawSub(octree.boxone)
-    }
-    if (octree.boxtwo.divided) {
-      // octree.boxtwo.show()
-      drawSub(octree.boxtwo)
-    }
-    if (octree.boxthr.divided) {
-      // octree.boxthr.show()
-      drawSub(octree.boxthr)
-    }
-    if (octree.boxfou.divided) {
-      // octree.boxfou.show()
-      drawSub(octree.boxfou)
-    }
-    if (octree.boxfiv.divided) {
-      // octree.boxfiv.show()
-      drawSub(octree.boxfiv)
-    }
-    if (octree.boxsix.divided) {
-      // octree.boxsix.show()
-      drawSub(octree.boxsix)
-    }
-    if (octree.boxsev.divided) {
-      // octree.boxsev.show()
-      drawSub(octree.boxsev)
-    }
-    if (octree.boxeig.divided) {
-      // octree.boxeig.show()
-      drawSub(octree.boxeig)
-    }
   }
+  if (octree.boxone.divided) {
+    // octree.boxone.show()
+    drawSub(octree.boxone)
+  }
+  if (octree.boxtwo.divided) {
+    // octree.boxtwo.show()
+    drawSub(octree.boxtwo)
+  }
+  if (octree.boxthr.divided) {
+    // octree.boxthr.show()
+    drawSub(octree.boxthr)
+  }
+  if (octree.boxfou.divided) {
+    // octree.boxfou.show()
+    drawSub(octree.boxfou)
+  }
+  if (octree.boxfiv.divided) {
+    // octree.boxfiv.show()
+    drawSub(octree.boxfiv)
+  }
+  if (octree.boxsix.divided) {
+    // octree.boxsix.show()
+    drawSub(octree.boxsix)
+  }
+  if (octree.boxsev.divided) {
+    // octree.boxsev.show()
+    drawSub(octree.boxsev)
+  }
+  if (octree.boxeig.divided) {
+    // octree.boxeig.show()
+    drawSub(octree.boxeig)
+  }
+
 }
