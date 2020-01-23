@@ -10,22 +10,22 @@ class Boid {
     this.perception = 100;
   }
   edges() {
-    if (this.pos.x > width) {
+    if (this.pos.x > bW) {
       this.pos.x = 0;
     }
-    if (this.pos.y > height) {
+    if (this.pos.y > bH) {
       this.pos.y = 0;
     }
     if (this.pos.x < 0) {
-      this.pos.x = width;
+      this.pos.x = bW;
     }
     if (this.pos.y < 0) {
-      this.pos.y = height;
+      this.pos.y = bH;
     }
     if (this.pos.z < 0) {
-      this.pos.z = 600;
+      this.pos.z = bW;
     }
-    if (this.pos.z > 600) {
+    if (this.pos.z > bW) {
       this.pos.z = 0;
     }
 
@@ -130,7 +130,7 @@ class Boid {
 
   show() {
     push();
-    translate(this.pos.x - width / 2, this.pos.y - height / 2, this.pos.z);
+    translate(this.pos.x, this.pos.y, this.pos.z);
 
 
     noStroke();

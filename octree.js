@@ -71,20 +71,28 @@ class Octree {
     this.depth += 1;
     let one = new Box(x - w, y - h, z - d, w, h, d);
     this.boxone = new Octree(one, this.capacity, this.depth);
+    // this.boxone.show();
     let two = new Box(x + w, y - h, z - d, w, h, d);
     this.boxtwo = new Octree(two, this.capacity, this.depth);
+    // this.boxtwo.show();
     let thr = new Box(x - w, y + h, z - d, w, h, d);
     this.boxthr = new Octree(thr, this.capacity, this.depth);
+    // this.boxthr.show();
     let fou = new Box(x + w, y + h, z - d, w, h, d);
     this.boxfou = new Octree(fou, this.capacity, this.depth);
+    // this.boxfou.show();
     let fiv = new Box(x - w, y - h, z + d, w, h, d);
     this.boxfiv = new Octree(fiv, this.capacity, this.depth);
+    // this.boxfiv.show();
     let six = new Box(x + w, y - h, z + d, w, h, d);
     this.boxsix = new Octree(six, this.capacity, this.depth);
+    // this.boxsix.show();
     let sev = new Box(x - w, y + h, z + d, w, h, d);
     this.boxsev = new Octree(sev, this.capacity, this.depth);
+    // this.boxsev.show();
     let eig = new Box(x + w, y + h, z + d, w, h, d);
     this.boxeig = new Octree(eig, this.capacity, this.depth);
+    // this.boxeig.show();
 
 
     this.divided = true;
@@ -146,6 +154,7 @@ class Octree {
     return found;
   }
   show() {
+
     push();
     let x = this.boundary.x;
     let y = this.boundary.y;
@@ -153,11 +162,11 @@ class Octree {
     let w = this.boundary.w / 2;
     let h = this.boundary.h / 2;
     let d = this.boundary.d / 2;
-    translate(-w, h, d);
+    translate(x, y, z);
 
     fill(255, 50)
-    sphere(20)
-    box(w*4);
+    //sphere(20)
+    box(w*2);
     pop();
   }
 
