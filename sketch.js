@@ -1,67 +1,66 @@
+
 let boids = [];
 let bW = 600;
 let bH = 600;
 let bD = 600;
 let ot;
-
+let check_1 = false;
 let a;
+let numberViewDirections = 100;
 
 function setup() {
   createCanvas(bW, bH, WEBGL);
-  h1 = createElement("h1","Waiting..");
-  for (let i = 0; i < 500; i++) {
+  h1 = createElement("P", "Waiting..");
+  check1 = createCheckbox("Show subdivision", false);
+  check1.changed(myCheckedEvent)
+  for (let i = 0; i < 2; i++) {
     boids.push(new Boid());
 
 
   }
   noStroke();
+  
 
 
 }
 
 function draw() {
   background(25);
+  //translate(-bW/16,-bH/2,-bD/16);
   orbitControl();
 
-
-  boundary = new Box(300, 375, 300, bW / 2, bH / 2, bD / 2)
-  //boundary.show()
+  
+  strokeWeight(0.1)
+  boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2)
+  boundary.show()
   ot = new Octree(boundary, 16, 0);
   h1.html(int(frameRate()));
   //ot.show();
-  // push();
-  // translate(0, 0, 0);
-  // sphere(20);
-  // pop();
+
 
   for (let b of boids) {
     let point = new Point(b.pos.x, b.pos.y, b.pos.z, b);
     ot.insert(point)
   }
-  //translate(-bW,-bH,-bD);
-  //drawSub(ot)
-  //noLoop();
-
-  // console.log(ot);
-  //
-  // noLoop();
-  //rotateX(PI / 2.9);
-
-  //translate(-width / 2, -height / 1.5 + 250, -100);
-
+  if (check_1) {
+    
+    drawSub(ot)
+  }
   for (let i = 0; i < boids.length; i++) {
     boids[i].edges();
     boids[i].flock(boids, ot);
     boids[i].update();
+    boids[i].drawPerception() 
     boids[i].show();
   }
-
+  
 }
 
 
 
 function drawSub(octree) {
-  if (octree.depth > 0) {
+  if (octree.depth > 1) {
+
     octree.boxone.show()
     octree.boxtwo.show()
     octree.boxthr.show()
@@ -105,3 +104,15 @@ function drawSub(octree) {
   }
 
 }
+
+
+function myCheckedEvent() {
+  if (this.checked()) {
+    check_1 = true;
+  } else {
+    check_1 = false;
+  }
+
+}
+
+

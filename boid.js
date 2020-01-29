@@ -8,6 +8,7 @@ class Boid {
     this.maxForce = 0.2;
     this.maxSpeed = 4;
     this.perception = 100;
+    this.radius = 5
   }
   edges() {
     if (this.pos.x > bW) {
@@ -127,18 +128,41 @@ class Boid {
     this.acc.mult(0);
 
   }
+  drawPerception() {
+    let pointCloud = [];
+    let goldenRatio = (1 + sqrt(5)) / 2;
+    let angleIncrement = PI * 2 * goldenRatio;
+    for (let i = 0; i < numberViewDirections / 2; i++) {
+      let t = i / numberViewDirections * 10;
+      let inclination = acos(1 - 2 * t);
+      let azimuth = angleIncrement * i;
+      let x = sin(inclination) * cos(azimuth);
+      let y = sin(inclination) * sin(azimuth);
+      let z = cos(inclination);
+      let nP = createVector(x, y, z);
+      nP.add(this.vel)
+      pointCloud.push(nP);
+      nP.mult(this.radius * 10);
+      push()
+      scale(1.5, -1.5, -1.5)
+      stroke(255,0,0);
+      strokeWeight(2);
+      translate(this.pos.x, this.pos.y - 250, this.pos.z);
+      point(nP.x, nP.y, nP.z);
+      pop()
+
+    }
+  }
 
   show() {
     push();
-    translate(this.pos.x, this.pos.y, this.pos.z);
-
-
+    scale(1.5, -1.5, -1.5)
+    translate(this.pos.x, this.pos.y - 250, this.pos.z);
+    this.nvel = this.vel.copy()
+    this.nvel.mult(7);
     noStroke();
-    fill(255, 0, 0);
+    fill(0, 200, 255);
     sphere(5);
-    //triangle(-5, 5, 0, -10, 5, 5);
-    pop();
-    // strokeWeight(6);
-    // cone(this.pos.x, this.pos.y);
+    
   }
 }

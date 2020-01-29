@@ -3,7 +3,7 @@
 // bz = [false, false, false, false, true, true, true, true];
 
 class Point {
-  constructor(x, y, z,userData) {
+  constructor(x, y, z, userData) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -42,10 +42,21 @@ class Box {
     );
   }
   show() {
-    push();
-    translate(this.x-bW/2, this.y-bH/2, this.z);
+
+
+    // rotateX();
+    // rotateY(10)
+    // rotateZ(10);
+    push()
+    stroke(0);
+    strokeWeight(5);
+    scale(1.5, -1.5, -1.5);
+    // rotateZ(HALF_PI / 2)
+    // rotateY(HALF_PI / 2)
+    translate(this.x, this.y-250, this.z);
+    //rotateX(HALF_PI);
     fill(200, 10)
-    box(this.w);
+    box(this.w * 2);
     pop();
   }
 }
@@ -162,11 +173,12 @@ class Octree {
     let w = this.boundary.w / 2;
     let h = this.boundary.h / 2;
     let d = this.boundary.d / 2;
-    translate(x, y, z);
-
-    fill(255, 50)
+    scale(1.5, -1.5, -1.5);
+    translate(x, y-250, z);
+    //console.log(this.depth)
+    fill(255, this.depth * 7);
     //sphere(20)
-    box(w*2);
+    box((w * 4) - 4);
     pop();
   }
 
