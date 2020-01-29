@@ -13,7 +13,7 @@ function setup() {
   h1 = createElement("P", "Waiting..");
   check1 = createCheckbox("Show subdivision", false);
   check1.changed(myCheckedEvent)
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 300; i++) {
     boids.push(new Boid());
 
 
@@ -42,7 +42,7 @@ function draw() {
     let point = new Point(b.pos.x, b.pos.y, b.pos.z, b);
     ot.insert(point)
   }
-  if (check_1) {
+  if (check_1()) {
     
     drawSub(ot)
   }
