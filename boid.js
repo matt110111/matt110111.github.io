@@ -163,6 +163,7 @@ class Boid {
     noStroke();
     fill(0, 200, 255);
     sphere(5);
+    pop();
     
   }
 }
