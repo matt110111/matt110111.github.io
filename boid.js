@@ -1,6 +1,6 @@
 class Boid {
 
-  constructor() {
+  constructor(leader=false) {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
     this.vel.setMag(random(2, 4));
@@ -9,6 +9,7 @@ class Boid {
     this.maxSpeed = 4;
     this.perception = 100;
     this.radius = 5
+    this.leader = leader;
   }
   edges() {
     if (this.pos.x > bW) {
@@ -130,40 +131,58 @@ class Boid {
   }
   drawPerception() {
     let pointCloud = [];
+    let nvel = this.vel.copy()
+
+    nvel.mult(this.perception / 6);
+
     let goldenRatio = (1 + sqrt(5)) / 2;
     let angleIncrement = PI * 2 * goldenRatio;
-    for (let i = 0; i < numberViewDirections / 2; i++) {
-      let t = i / numberViewDirections * 10;
+    for (let i = 0; i < numberViewDirections; i++) {
+      let t = i / numberViewDirections;
       let inclination = acos(1 - 2 * t);
       let azimuth = angleIncrement * i;
       let x = sin(inclination) * cos(azimuth);
       let y = sin(inclination) * sin(azimuth);
       let z = cos(inclination);
       let nP = createVector(x, y, z);
+
       nP.add(this.vel)
-      pointCloud.push(nP);
-      nP.mult(this.radius * 10);
-      push()
-      scale(1.5, -1.5, -1.5)
-      stroke(255,0,0);
-      strokeWeight(2);
-      translate(this.pos.x, this.pos.y - 250, this.pos.z);
-      point(nP.x, nP.y, nP.z);
-      pop()
+      nP.mult(this.perception / 4);
+      if (nvel.dist(nP) < this.perception / 4) {
+        nP.normalize();
+        pointCloud.push(nP);
+      }
+
+      if (this.leader&&perception_mask) {
+        push()
+        scale(1.5, -1.5, -1.5)
+        stroke(0, 255, 0,1);
+        strokeWeight(2);
+        translate(this.pos.x, this.pos.y - 250, this.pos.z);
+        line(0, 0, 0, nP.x, nP.y, nP.z);
+        pop()
+      }
+
+
 
     }
   }
+
 
   show() {
     push();
     scale(1.5, -1.5, -1.5)
     translate(this.pos.x, this.pos.y - 250, this.pos.z);
-    this.nvel = this.vel.copy()
-    this.nvel.mult(7);
+
     noStroke();
+    if (!this.leader){
     fill(0, 200, 255);
+    }
+    else{
+      fill(255,0,0);
+    }
     sphere(5);
     pop();
-    
+
   }
 }
