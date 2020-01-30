@@ -1,5 +1,5 @@
 let boids = [];
-let bW = 1000;
+let bW = 800;
 let bH = 500;
 let bD = 800;
 
@@ -34,7 +34,7 @@ function draw() {
 
   
   orbitControl();
-  translate(bW - bW / 1.7, -bH-100, -bD * 3.1);
+  translate(bW - bW / 1.7, -bH-100, -bD * 2.5);
   rotateX(HALF_PI);
   rotateZ(2.3);
   strokeWeight(0.1);
