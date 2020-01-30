@@ -34,7 +34,7 @@ function draw() {
 
   
   orbitControl();
-  translate(bW - bW / 1.7, -bH-100, -bD * 2.5);
+  translate(bW - bW / 1.7, -bH-100, -bD * 3.1);
   rotateX(HALF_PI);
   rotateZ(2.3);
   strokeWeight(0.1);
