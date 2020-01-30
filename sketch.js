@@ -1,35 +1,35 @@
-
 let boids = [];
 let bW = 600;
 let bH = 600;
 let bD = 600;
 let ot;
-let check_1 = false;
+let sub_division_view = false;
 let a;
 let numberViewDirections = 100;
 
 function setup() {
   createCanvas(bW, bH, WEBGL);
   h1 = createElement("P", "Waiting..");
-  check1 = createCheckbox("Show subdivision", false);
-  check1.changed(myCheckedEvent)
+  sub_division_view_ = createCheckbox("Show subdivision", false);
+  sub_division_view_.changed(myCheckedEvent)
   for (let i = 0; i < 200; i++) {
     boids.push(new Boid());
 
 
   }
   noStroke();
-  
+
 
 
 }
 
 function draw() {
   background(25);
-  //translate(-bW/16,-bH/2,-bD/16);
-  orbitControl();
+  translate(bW-300,-bH,-bD*2.2);
+  //orbitControl();
 
-  
+  rotateX(HALF_PI-.2);
+  rotateZ(2.4)
   strokeWeight(0.1)
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2)
   boundary.show()
@@ -42,10 +42,12 @@ function draw() {
     let point = new Point(b.pos.x, b.pos.y, b.pos.z, b);
     ot.insert(point)
   }
-  if (check_1) {
-    
+
+  if (sub_division_view) {
+
     drawSub(ot)
   }
+
   for (let i = 0; i < boids.length; i++) {
     boids[i].edges();
     boids[i].flock(boids, ot);
@@ -53,7 +55,7 @@ function draw() {
     //boids[i].drawPerception() 
     boids[i].show();
   }
-  
+
 }
 
 
@@ -108,11 +110,9 @@ function drawSub(octree) {
 
 function myCheckedEvent() {
   if (this.checked()) {
-    check_1 = true;
+    sub_division_view = true;
   } else {
-    check_1 = false;
+    sub_division_view = false;
   }
 
 }
-
-
