@@ -181,6 +181,52 @@ class Octree {
     box((w * 4) - 4);
     pop();
   }
+}
 
+
+function drawSub(octree, depth) {
+  if (octree.depth > depth) {
+
+    octree.boxone.show()
+    octree.boxtwo.show()
+    octree.boxthr.show()
+    octree.boxfou.show()
+    octree.boxfiv.show()
+    octree.boxsix.show()
+    octree.boxsev.show()
+    octree.boxeig.show()
+  }
+  if (octree.boxone.divided) {
+    // octree.boxone.show()
+    drawSub(octree.boxone, depth)
+  }
+  if (octree.boxtwo.divided) {
+    // octree.boxtwo.show()
+    drawSub(octree.boxtwo, depth)
+  }
+  if (octree.boxthr.divided) {
+    // octree.boxthr.show()
+    drawSub(octree.boxthr, depth)
+  }
+  if (octree.boxfou.divided) {
+    // octree.boxfou.show()
+    drawSub(octree.boxfou, depth)
+  }
+  if (octree.boxfiv.divided) {
+    // octree.boxfiv.show()
+    drawSub(octree.boxfiv, depth)
+  }
+  if (octree.boxsix.divided) {
+    // octree.boxsix.show()
+    drawSub(octree.boxsix, depth)
+  }
+  if (octree.boxsev.divided) {
+    // octree.boxsev.show()
+    drawSub(octree.boxsev, depth)
+  }
+  if (octree.boxeig.divided) {
+    // octree.boxeig.show()
+    drawSub(octree.boxeig, depth)
+  }
 
 }

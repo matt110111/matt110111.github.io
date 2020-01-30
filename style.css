@@ -1,14 +1,33 @@
 html{
   margin: 0;
-  color:#282828;
+  
   padding: 0;
 }
 canvas {
   display: block;
+
+
 }
 
 body {
   margin: 0;
+  background-color:#282828;
   color:#00AAFF;
   font-family: Arial, Helvetica, sans-serif;
+
+}
+#controlposition {
+  
+  
+}
+#canvasposition {
+  margin: 0;
+  
+  display: flex;
+  border: solid;
+  /* This centers our sketch horizontally. */
+  justify-content: center;
+
+  /* This centers our sketch vertically. */
+
 }

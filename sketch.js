@@ -1,22 +1,24 @@
 let boids = [];
 let bW = 800;
-let bH = 800;
+let bH = 500;
 let bD = 800;
-let ot;
+
 let sub_division_view = false;
 let perception_mask = false;
-let a;
+
 let numberViewDirections = 100;
 
 function setup() {
   createCanvas(bW, bH, WEBGL).parent('canvasposition');
   fpsElement = createElement("H1", "Waiting..");
-  show_player_perception = createCheckbox("Show boids perception", false);
-  show_player_perception.changed(perceptionViewCheck)
-  sub_division_view_ = createCheckbox("Show subdivision", false);
+  sub_division_depth_ = createSlider(1, 5, 3, 1).parent('controlposition');
+
+  sub_division_view_ = createCheckbox("Show subdivision", false).parent('controlposition');
   sub_division_view_.changed(subdivisionCheck)
-  h1 = createElement("P", "Waiting..");
-  sub_division_depth_ = createSlider(1, 5, 1, 1).parent('controlposition');
+  show_player_perception = createCheckbox("Show boids perception", false).parent('controlposition');
+  show_player_perception.changed(perceptionViewCheck);
+  h1 = createElement("P", "Number of boid updates p/s:");
+
   for (let i = 0; i < 299; i++) {
     boids.push(new Boid());
   }
@@ -30,11 +32,11 @@ function setup() {
 function draw() {
   background("#282828");
 
-
+  
   orbitControl();
-  translate(bW - bW / 1.5, -bH, -bD * 2.2);
-  rotateX(HALF_PI - 0.2);
-  rotateZ(2.4);
+  translate(bW - bW / 1.7, -bH-100, -bD * 2.5);
+  rotateX(HALF_PI);
+  rotateZ(2.3);
   strokeWeight(0.1);
 
 
@@ -69,52 +71,6 @@ function draw() {
 
 
 
-function drawSub(octree, depth) {
-  if (octree.depth > depth) {
-
-    octree.boxone.show()
-    octree.boxtwo.show()
-    octree.boxthr.show()
-    octree.boxfou.show()
-    octree.boxfiv.show()
-    octree.boxsix.show()
-    octree.boxsev.show()
-    octree.boxeig.show()
-  }
-  if (octree.boxone.divided) {
-    // octree.boxone.show()
-    drawSub(octree.boxone, depth)
-  }
-  if (octree.boxtwo.divided) {
-    // octree.boxtwo.show()
-    drawSub(octree.boxtwo, depth)
-  }
-  if (octree.boxthr.divided) {
-    // octree.boxthr.show()
-    drawSub(octree.boxthr, depth)
-  }
-  if (octree.boxfou.divided) {
-    // octree.boxfou.show()
-    drawSub(octree.boxfou, depth)
-  }
-  if (octree.boxfiv.divided) {
-    // octree.boxfiv.show()
-    drawSub(octree.boxfiv, depth)
-  }
-  if (octree.boxsix.divided) {
-    // octree.boxsix.show()
-    drawSub(octree.boxsix, depth)
-  }
-  if (octree.boxsev.divided) {
-    // octree.boxsev.show()
-    drawSub(octree.boxsev, depth)
-  }
-  if (octree.boxeig.divided) {
-    // octree.boxeig.show()
-    drawSub(octree.boxeig, depth)
-  }
-
-}
 
 
 function perceptionViewCheck() {
@@ -124,6 +80,7 @@ function perceptionViewCheck() {
     perception_mask = false;
   }
 }
+
 function subdivisionCheck() {
   if (this.checked()) {
     sub_division_view = true;
