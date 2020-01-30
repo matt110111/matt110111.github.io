@@ -1,5 +1,5 @@
 let boids = [];
-let bW = 800;
+let bW = 1000;
 let bH = 500;
 let bD = 800;
 
