@@ -9,14 +9,14 @@ let a;
 let numberViewDirections = 100;
 
 function setup() {
-  createCanvas(bW, bH, WEBGL);
-  fpsElement = createElement("P", "Waiting..");
+  createCanvas(bW, bH, WEBGL).parent('canvasposition');
+  fpsElement = createElement("H1", "Waiting..");
   show_player_perception = createCheckbox("Show boids perception", false);
   show_player_perception.changed(perceptionViewCheck)
   sub_division_view_ = createCheckbox("Show subdivision", false);
   sub_division_view_.changed(subdivisionCheck)
   h1 = createElement("P", "Waiting..");
-  sub_division_depth_ = createSlider(1, 5, 1, 1);
+  sub_division_depth_ = createSlider(1, 5, 1, 1).parent('controlposition');
   for (let i = 0; i < 299; i++) {
     boids.push(new Boid());
   }
@@ -28,7 +28,7 @@ function setup() {
 }
 
 function draw() {
-  background(25);
+  background("#282828");
 
 
   orbitControl();
@@ -42,7 +42,7 @@ function draw() {
   boundary.show()
   ot = new Octree(boundary, 8, 0);
   fpsElement.html(int(frameRate()));
-  //ot.show();
+  // ot.show();
   let sub_division_depth = sub_division_depth_.value();
 
   for (let b of boids) {
