@@ -1,9 +1,9 @@
 class Boid {
 
-  constructor(leader=false) {
+  constructor(leader = false) {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
-    this.vel.setMag(random(2, 4));
+    this.vel.setMag(random(-4, 4));
     this.acc = createVector();
     this.maxForce = 0.2;
     this.maxSpeed = 4;
@@ -38,6 +38,7 @@ class Boid {
     let steering = createVector();
     let total = 0;
     for (let b of boids) {
+      boidUpdates++;
       let other = b.userData;
       let d = other.pos.dist(this.pos)
       if (other != this && d < this.perception) {
@@ -55,10 +56,12 @@ class Boid {
 
   }
   cohesion(boids) {
+
     let steering = createVector();
     let total = 0;
 
     for (let b of boids) {
+      boidUpdates++;
       let other = b.userData;
       let d = other.pos.dist(this.pos)
       if (other != this && d < this.perception) {
@@ -79,9 +82,11 @@ class Boid {
   }
 
   seperation(boids) {
+
     let steering = createVector();
     let total = 0;
     for (let b of boids) {
+      boidUpdates++;
       let other = b.userData;
       let d = other.pos.dist(this.pos)
       if (other != this && d < this.perception / 2) {
@@ -105,12 +110,19 @@ class Boid {
 
 
   flock(boids, ot) {
-    let range = new Box(this.pos.x, this.pos.y, this.pos.z, this.perception, this.perception, this.perception);
-    //range.show()
+    let range;
 
+    if (boid_range_shape == 'Box') {
+      range = new Box(this.pos.x, this.pos.y, this.pos.z, this.perception, this.perception, this.perception);
+    } else {
+      range = new Sphere(this.pos.x, this.pos.y, this.pos.z, this.perception);
+    }
+
+    if (perception_mask) {
+      range.show()
+    }
     let filteredBoids = ot.query(range);
-    //console.log(filteredBoids.length);
-    //noLoop();
+    //Add Weights to the 3 fundementals
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
@@ -148,38 +160,50 @@ class Boid {
 
       nP.add(this.vel)
       nP.mult(this.perception / 4);
-      if (nvel.dist(nP) < this.perception / 4) {
+      if (nvel.dist(nP) > this.perception / 4) {
         nP.normalize();
-        pointCloud.push(nP);
+
+        let nR = new Ray(this.pos, nP);
+        let intersect = nR.intersect(planeArray[0])
+        //console.log(intersect);
+        if (intersect && this.leader && perception_mask) {
+
+          push()
+          stroke(0, 255, 0);
+          strokeWeight(20);
+
+          line(this.pos.x, this.pos.y, this.pos.z, intersect.x, intersect.y, intersect.z);
+          pop()
+
+
+        }
+
+        // if (this.leader && perception_mask) {
+        //   push()
+        //   stroke(0, 255, 0, 1);
+        //   strokeWeight(2);
+        //   translate(this.pos.x, this.pos.y, this.pos.z);
+        //   line(0, 0, 0, nP.x, nP.y, nP.z);
+        //   pop()
+        // }
+
+
+
       }
-
-      if (this.leader&&perception_mask) {
-        push()
-        scale(1.5, -1.5, -1.5)
-        stroke(0, 255, 0,1);
-        strokeWeight(2);
-        translate(this.pos.x, this.pos.y - 250, this.pos.z);
-        line(0, 0, 0, nP.x, nP.y, nP.z);
-        pop()
-      }
-
-
-
     }
+
+
   }
-
-
   show() {
     push();
-    scale(1.5, -1.5, -1.5)
-    translate(this.pos.x, this.pos.y - 250, this.pos.z);
+
+    translate(this.pos.x, this.pos.y, this.pos.z);
 
     noStroke();
-    if (!this.leader){
-    fill(0, 200, 255);
-    }
-    else{
-      fill(255,0,0);
+    if (!this.leader) {
+      fill("#00AAFF");
+    } else {
+      fill(255, 0, 0);
     }
     sphere(5);
     pop();

@@ -1,30 +1,41 @@
 let boids = [];
-let bW = 800;
-let bH = 500;
-let bD = 800;
+let bW = 600;
+let bH = 600;
+let bD = 600;
 
 let sub_division_view = false;
 let perception_mask = false;
-
+let boid_range_shape = 'Sphere';
+let boidUpdates = 0;
 let numberViewDirections = 100;
+let planeArray = [];
 
 function setup() {
   createCanvas(bW, bH, WEBGL).parent('canvasposition');
+  frameRate(60);
   fpsElement = createElement("H1", "Waiting..");
+
   sub_division_depth_ = createSlider(1, 5, 3, 1).parent('controlposition');
 
+  boid_range_shape_ = createSelect();
+  boid_range_shape_.option('Sphere')
+  boid_range_shape_.option('Box')
+
+  boid_range_shape_.changed(boid_range_shape_Changed)
   sub_division_view_ = createCheckbox("Show subdivision", false).parent('controlposition');
   sub_division_view_.changed(subdivisionCheck)
   show_player_perception = createCheckbox("Show boids perception", false).parent('controlposition');
   show_player_perception.changed(perceptionViewCheck);
   h1 = createElement("P", "Number of boid updates p/s:");
+  boidUpdates_ = createElement("H1", "Waiting..");
 
-  for (let i = 0; i < 299; i++) {
+  for (let i = 0; i < 75; i++) {
     boids.push(new Boid());
   }
-  boids.push(new Boid(true));
+  //boids.push(new Boid(true));
   noStroke();
 
+  planeArray.push(new Plane(createVector(0, 0, 0),createVector(bW, 0, 0),createVector(bW, bH, 0)));
 
 
 }
@@ -32,19 +43,29 @@ function setup() {
 function draw() {
   background("#282828");
 
-  
   orbitControl();
-  translate(bW - bW / 1.7, -bH-100, -bD * 2.5);
+
+  translate(bW - bW / 1.7, bH, -bD * 1);
   rotateX(HALF_PI);
   rotateZ(2.3);
+
   strokeWeight(0.1);
+
+  push()
+  translate(0, 0, 0);
+  strokeWeight(10);
+  stroke(255);
+  pop()
+
 
 
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2)
   boundary.show()
-  ot = new Octree(boundary, 8, 0);
+  ot = new Octree(boundary, 4, 0);
   fpsElement.html(int(frameRate()));
-  // ot.show();
+  boidUpdates_.html(boidUpdates);
+  boidUpdates = 0;
+
   let sub_division_depth = sub_division_depth_.value();
 
   for (let b of boids) {
@@ -71,7 +92,10 @@ function draw() {
 
 
 
+function boid_range_shape_Changed(){
+  boid_range_shape = boid_range_shape_.value()
 
+}
 
 function perceptionViewCheck() {
   if (this.checked()) {

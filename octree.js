@@ -10,6 +10,55 @@ class Point {
     this.userData = userData;
   }
 }
+class Sphere {
+  constructor(x, y, z, r) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.r = r;
+    this.rSquared = this.r * this.r;
+  }
+
+  contains(point) {
+    // check if the point is in the circle by checking if the euclidean distance of
+    // the point and the center of the circle if smaller or equal to the radius of
+    // the circle
+    let d = Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2) + Math.pow(point.z - this.z, 2);;
+    return d <= this.rSquared;
+  }
+
+  intersects(range) {
+    var xDist = Math.abs(range.x - this.x);
+    var yDist = Math.abs(range.y - this.y);
+    var zDist = Math.abs(range.z - this.z);
+    // radius of the circle
+    var r = this.r;
+
+    var w = range.w;
+    var h = range.h;
+    var l = range.d;
+
+    var edges = Math.pow(xDist - w, 2) + Math.pow(yDist - h, 2) + Math.pow(zDist - l, 2);
+
+    // no intersection
+    if (xDist > r + w || yDist > r + h || zDist > r + l) return false;
+
+    // intersection within the circle
+    if (xDist <= w || yDist <= h || zDist <= l) return true;
+
+    // intersection on the edge of the circle
+    return edges <= this.rSquared;
+  }
+  show() {
+    push();
+    noStroke();
+    fill(120,10);
+    translate(this.x,this.y,this.z);
+    sphere(this.perception);
+    pop();
+
+  }
+}
 
 class Box {
   constructor(x, y, z, w, h, d) {
@@ -44,19 +93,13 @@ class Box {
   show() {
 
 
-    // rotateX();
-    // rotateY(10)
-    // rotateZ(10);
+
     push()
     stroke(0);
     strokeWeight(5);
-    scale(1.5, -1.5, -1.5);
-    // rotateZ(HALF_PI / 2)
-    // rotateY(HALF_PI / 2)
-    translate(this.x, this.y-250, this.z);
-    //rotateX(HALF_PI);
+    translate(this.x, this.y, this.z);
     fill(200, 10)
-    box(this.w * 2);
+    box(this.w*2);
     pop();
   }
 }
@@ -173,10 +216,11 @@ class Octree {
     let w = this.boundary.w / 2;
     let h = this.boundary.h / 2;
     let d = this.boundary.d / 2;
-    scale(1.5, -1.5, -1.5);
-    translate(x, y-250, z);
+    //scale(1.5, -1.5, -1.5);
+    translate(x, y, z);
     //console.log(this.depth)
-    fill(255, this.depth * 7);
+    let opacity = map(this.depth, 0, 6, 6, 0);
+    fill(255, opacity * 10);
     //sphere(20)
     box((w * 4) - 4);
     pop();
