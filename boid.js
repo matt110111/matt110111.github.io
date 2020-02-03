@@ -4,12 +4,14 @@ class Boid {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
     this.vel.setMag(random(-4, 4));
+
     this.acc = createVector();
     this.maxForce = 0.2;
     this.maxSpeed = 4;
     this.perception = 100;
     this.radius = 5
     this.leader = leader;
+    this.pointCloud = generatePointCloud()
   }
   edges() {
     if (this.pos.x > bW) {
@@ -106,22 +108,29 @@ class Boid {
 
   }
   avoidence(planes) {
-    let steering = createVector();
 
-//     generatePointCloud;
-//     for (let b of planes) {
-//       boidUpdates++;
-//       if pointONPlane = true
-//       findFirstPonint not touching plane
-//       let d = other.pos.dist(this.pos)
-//       if (other != this && d < this.perception / 2) {
-//         let diff = p5.Vector.sub(this.pos, other.pos);
-//         diff.div(d * d)
-//         steering.add(diff);
-//         total++;
-       // }
-  
+    for (let p of planes) {
+
+      boidUpdates++;
+      let genPointCloud = generatePointCloud();
+      for (let vector of genPointCloud) {
+        let nVel = this.vel.copy()
+        nVel.normalize()
+        let nVector = p5.Vector.sub(vector, nVel);
+        let ray = new Ray(this.pos, nVector)
+        let Psi = ray.intersect(p)
+
+        if (p5.Vector.dist(Psi,this.pos)<600) {
+          push();
+          stroke(0, 0, 255)
+          line(this.pos.x, this.pos.y, this.pos.z, Psi.x, Psi.y, Psi.z)
+          pop();
+        }
+      }
+    }
   }
+
+
 
 
 

@@ -10,7 +10,6 @@ let sub_division_view = false;
 let perception_mask = false;
 let boid_range_shape = 'Sphere';
 let boidUpdates = 0;
-let numberViewDirections = 100;
 let planeArray = [];
 
 function setup() {
@@ -32,24 +31,18 @@ function setup() {
   h1 = createElement("P", "Number of boid updates p/s:");
   boidUpdates_ = createElement("H1", "Waiting..");
 
-  for (let i = 0; i < 75; i++) {
+  for (let i = 0; i < 0; i++) {
     boids.push(new Boid());
   }
-  //boids.push(new Boid(true));
+  boids.push(new Boid(true));
   noStroke();
-  // 0,0,0 	600,0,600	0,0,600
-  // 600,0,0	0,0,600	600,600,600
-  // 600,600,0	600,600,600	0,600,600
-  // 0,600,0	0,0,600	0,600,600
-  // 0,600,600	600,0,600	0,0,600
-  // 600,0,0	0,600,0	600,600,0
 
   planeArray.push(new Plane(createVector(0, 0, 0), createVector(600, 0, 600), createVector(0, 0, 600)));
-  planeArray.push(new Plane(createVector(600,0,0), createVector(0,0,600), createVector(600,600,600)));
-  planeArray.push(new Plane(createVector(600,600,0), createVector(600,600,600),createVector(0,600,600)));
-  planeArray.push(new Plane(createVector(0,0,600), createVector(0,600,600),createVector(0,0,0)));
-  planeArray.push(new Plane(createVector(0,600,600), createVector(600,0,600),createVector(0,0,600)));
-  planeArray.push(new Plane(createVector(600,0,0), createVector(0,600,0),createVector(600,600,0)));
+  planeArray.push(new Plane(createVector(600, 0, 600), createVector(600, 600, 600), createVector(600, 0, 0)));
+ planeArray.push(new Plane(createVector(600, 600, 0), createVector(0, 600, 600), createVector(600, 600, 600)));
+  planeArray.push(new Plane(createVector(0, 600, 600), createVector(0, 0, 0), createVector(0, 600, 0)));
+  planeArray.push(new Plane(createVector(600, 600, 600), createVector(0, 0, 600), createVector(600, 0, 600)));
+  planeArray.push(new Plane(createVector(600, 0, 0), createVector(0, 600, 0), createVector(600, 600, 0)));
 
 }
 
@@ -64,12 +57,11 @@ function draw() {
   rotateX(HALF_PI);
   rotateZ((PI / 4) + .02);
 
-  strokeWeight(0.1);
-  for (let g of planeArray) {
-    g.showLines()
+
+  for (let p of planeArray) {
+    //p.debugLines()
+    //print(p.normal)
   }
-
-
 
 
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
@@ -98,6 +90,10 @@ function draw() {
     boids[i].edges();
     boids[i].flock(boids, ot);
     boids[i].update();
+   if (boids[i].leader) {
+
+      boids[i].avoidence(planeArray);
+    }
     boids[i].show();
   }
 
@@ -128,17 +124,19 @@ function subdivisionCheck() {
 
 
 function generatePointCloud() {
+  let viewDensity = 80
   let Array = []
   let goldenRatio = (1 + sqrt(5)) / 2;
   let angleIncrement = PI * 2 * goldenRatio;
   for (let i = 0; i < viewDensity; i++) {
     let t = i / viewDensity;
-    let inclination = acos(1 - 2 * t);
+    let inclination = acos(1 - 2 * t/15);
     let azimuth = angleIncrement * i;
     let x = sin(inclination) * cos(azimuth);
     let y = sin(inclination) * sin(azimuth);
     let z = cos(inclination);
     let nP = createVector(x, y, z);
+    nP.normalize();
     Array.push(nP)
   }
   return Array;
