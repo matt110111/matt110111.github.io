@@ -52,8 +52,8 @@ class Sphere {
   show() {
     push();
     noStroke();
-    fill(120,10);
-    translate(this.x,this.y,this.z);
+    fill(10,200,0, 10);
+    translate(this.x, this.y, this.z);
     sphere(this.perception);
     pop();
 
@@ -61,13 +61,15 @@ class Sphere {
 }
 
 class Box {
-  constructor(x, y, z, w, h, d) {
+  constructor(x, y, z, w, h, d, main = false) {
     this.x = x;
     this.y = y;
     this.z = z;
     this.w = w;
     this.h = h;
     this.d = d;
+    this.main = main;
+    
   }
 
   contains(point) {
@@ -94,13 +96,22 @@ class Box {
 
 
 
-    push()
-    stroke(0);
-    strokeWeight(5);
-    translate(this.x, this.y, this.z);
-    fill(200, 10)
-    box(this.w*2);
-    pop();
+    
+    if (this.main) {
+      push()
+      stroke(0);
+      strokeWeight(5);
+      translate(this.x, this.y, this.z);
+      fill(200, 10);
+      box(this.w * 2);
+      pop()
+    } else {
+      push()
+      translate(this.x, this.y, this.z);
+      fill(0,200,0, 10);
+      box(this.w);
+      pop();
+    }
   }
 }
 

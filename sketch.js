@@ -3,6 +3,9 @@ let bW = 600;
 let bH = 600;
 let bD = 600;
 
+
+
+
 let sub_division_view = false;
 let perception_mask = false;
 let boid_range_shape = 'Sphere';
@@ -34,9 +37,19 @@ function setup() {
   }
   //boids.push(new Boid(true));
   noStroke();
+  // 0,0,0 	600,0,600	0,0,600
+  // 600,0,0	0,0,600	600,600,600
+  // 600,600,0	600,600,600	0,600,600
+  // 0,600,0	0,0,600	0,600,600
+  // 0,600,600	600,0,600	0,0,600
+  // 600,0,0	0,600,0	600,600,0
 
-  planeArray.push(new Plane(createVector(0, 0, 0),createVector(bW, 0, 0),createVector(bW, bH, 0)));
-
+  planeArray.push(new Plane(createVector(0, 0, 0), createVector(600, 0, 600), createVector(0, 0, 600)));
+  planeArray.push(new Plane(createVector(600,0,0), createVector(0,0,600), createVector(600,600,600)));
+  planeArray.push(new Plane(createVector(600,600,0), createVector(600,600,600),createVector(0,600,600)));
+  planeArray.push(new Plane(createVector(0,0,600), createVector(0,600,600),createVector(0,0,0)));
+  planeArray.push(new Plane(createVector(0,600,600), createVector(600,0,600),createVector(0,0,600)));
+  planeArray.push(new Plane(createVector(600,0,0), createVector(0,600,0),createVector(600,600,0)));
 
 }
 
@@ -45,25 +58,26 @@ function draw() {
 
   orbitControl();
 
-  translate(bW - bW / 1.7, bH, -bD * 1);
+
+
+  translate(bW - bW, bH - bH / 2, -bD * 1.5);
   rotateX(HALF_PI);
-  rotateZ(2.3);
+  rotateZ((PI / 4) + .02);
 
   strokeWeight(0.1);
-
-  push()
-  translate(0, 0, 0);
-  strokeWeight(10);
-  stroke(255);
-  pop()
+  for (let g of planeArray) {
+    g.showLines()
+  }
 
 
 
-  boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2)
+
+  boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
   boundary.show()
   ot = new Octree(boundary, 4, 0);
+
   fpsElement.html(int(frameRate()));
-  boidUpdates_.html(boidUpdates);
+  boidUpdates_.html(round(boidUpdates / 1000) + "k");
   boidUpdates = 0;
 
   let sub_division_depth = sub_division_depth_.value();
@@ -85,14 +99,13 @@ function draw() {
     boids[i].flock(boids, ot);
     boids[i].update();
     boids[i].show();
-    boids[i].drawPerception()
   }
 
 }
 
 
 
-function boid_range_shape_Changed(){
+function boid_range_shape_Changed() {
   boid_range_shape = boid_range_shape_.value()
 
 }
@@ -111,4 +124,22 @@ function subdivisionCheck() {
   } else {
     sub_division_view = false;
   }
+}
+
+
+function generatePointCloud() {
+  let Array = []
+  let goldenRatio = (1 + sqrt(5)) / 2;
+  let angleIncrement = PI * 2 * goldenRatio;
+  for (let i = 0; i < viewDensity; i++) {
+    let t = i / viewDensity;
+    let inclination = acos(1 - 2 * t);
+    let azimuth = angleIncrement * i;
+    let x = sin(inclination) * cos(azimuth);
+    let y = sin(inclination) * sin(azimuth);
+    let z = cos(inclination);
+    let nP = createVector(x, y, z);
+    Array.push(nP)
+  }
+  return Array;
 }
