@@ -99,8 +99,8 @@ class Box {
     
     if (this.main) {
       push()
-      //stroke(80)
-      //strokeWeight(5);
+      stroke(80)
+      strokeWeight(5);
       translate(this.x, this.y, this.z);
       fill(200, 10);
       box(this.w * 2);

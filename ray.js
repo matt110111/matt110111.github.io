@@ -1,16 +1,17 @@
 class Ray {
-  constructor(vector, d) {
-    this.pos = vector;
+  constructor(v, d) {
+    this.pos = v;
     this.dir = d;
 
 
   }
   show() {
     push();
-    stroke(0, 255, 0, 10);
-    strokeWeight(2)
-    translate(this.pos.x, this.pos.y, this.pos.z)
-    line(0, 0, 0, this.dir.x * 100, this.dir.y * 100, this.dir.z * 100)
+    noStroke()
+    fill(255,255,150)
+    translate(this.pos.x,this.pos.y,this.pos.z)
+    translate(this.dir.x * 100, this.dir.y * 100, this.dir.z * 100)
+    sphere(2)
     pop();
 
 
@@ -20,32 +21,29 @@ class Ray {
   intersect(Plane) {
 
 
-    let ndotu = p5.Vector.dot(Plane.normal, this.dir)
+    let d = p5.Vector.dot(Plane.normal,Plane.b);
     
-    if (abs(ndotu) < 1e-6) {
+    if (p5.Vector.dot(Plane.normal, this.dir) == 0){
       return false;
     }
-    let w = p5.Vector.sub(this.pos,Plane.r)
-    let si = -(Plane.normal.dot(w)) / ndotu
-    let c = createVector(this.dir.x + Plane.s.x, this.dir.y + Plane.s.y, this.dir.z + Plane.s.z)
-    c = createVector(c.x * -si, c.y * -si, c.z*-si)
-    c.add(w)
-
+    let x = (d - p5.Vector.dot(Plane.normal, this.pos)) / p5.Vector.dot(Plane.normal, this.dir);
+    let v = p5.Vector.mult(this.dir,x);
+    let c = p5.Vector.add(this.pos, v);
     return c;
   }
+
+
 }
+// float d = Dot(normal, coord);
+
+// if (Dot(normal, ray) == 0) {
+//     return false; // No intersection, the line is parallel to the plane
+// }
 
 
+//  // Compute the X value for the directed line ray intersecting the plane
+//  float x = (d - Dot(normal, rayOrigin)) / Dot(normal, ray);
 
-
-// ndotu = p5.Vector.dot(planeNormal, rayDirection)
-//   // if (abs(ndotu) < epsilon) {
-//   //   return c;
-//   // }
-//   let w = p5.Vector.sub(rayPoint, planePoint)
-//   let si = -(planeNormal.dot(w)) / ndotu
-//   let c = createVector(rayDirection.x + planePoint.x, rayDirection.y + planePoint.y, rayDirection.z + planePoint.z)
-//   c = createVector(c.x * -si, c.y * -si)
-//   c.add(w)
-
-//   return c;
+//  // output contact point
+//  *contact = rayOrigin + normalize(ray)*x; //Make sure your ray vector is normalized
+//  return true;

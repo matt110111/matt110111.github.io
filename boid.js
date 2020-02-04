@@ -108,28 +108,56 @@ class Boid {
 
   }
   avoidence(planes) {
+    let steering = createVector();
+    let genPointCloud = generatePointCloud();
+    let nVel = this.vel.copy()
+    nVel.normalize()
+    let furthestP = {
+      d: 0,
+      v: createVector()
+    };
 
     for (let p of planes) {
 
-      boidUpdates++;
-      let genPointCloud = generatePointCloud();
       for (let vector of genPointCloud) {
-        let nVel = this.vel.copy()
-        nVel.normalize()
-        let nVector = p5.Vector.sub(vector, nVel);
-        let ray = new Ray(this.pos, nVector)
-        let Psi = ray.intersect(p)
 
-        if (p5.Vector.dist(Psi,this.pos)<600) {
-          push();
-          stroke(0, 0, 255)
-          line(this.pos.x, this.pos.y, this.pos.z, Psi.x, Psi.y, Psi.z)
-          pop();
+
+        let ray = new Ray(this.pos, vector)
+
+
+        let Psi = ray.intersect(p)
+        if (Psi == false) {
+
+          
+              
+              
+            }
+          }
         }
       }
     }
+    
+    if (furthestP.d > 0) {
+      if (this.leader){
+        push();
+        fill(75, 190, 255)
+        stroke(0,255,0)
+        strokeWeight(3)
+        
+        line(furthestP.v.x,furthestP.v.y,furthestP.v.z,this.pos.x,this.pos.y,this.pos.z)
+        translate(furthestP.v.x,furthestP.v.y,furthestP.v.z)
+        noStroke()
+        sphere(2)
+        pop();
+      }
+      steering.add(furthestP.v)
+      steering.setMag(this.maxSpeed);
+      // steering = p5.Vector.cross(furthestP.v, this.vel);
+      steering.sub(this.vel)
+      steering.limit(this.maxForce + .2);
+    }
+    return steering;
   }
-
 
 
 
@@ -152,10 +180,12 @@ class Boid {
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
+    let avoidence = this.avoidence(planeArray);
     //print(alignment);
     this.acc.add(alignment);
     this.acc.add(cohesion);
     this.acc.add(seperation);
+    this.acc.add(avoidence)
   }
 
   update() {
