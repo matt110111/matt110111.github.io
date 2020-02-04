@@ -4,12 +4,14 @@ class Boid {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
     this.vel.setMag(random(-4, 4));
+
     this.acc = createVector();
     this.maxForce = 0.2;
     this.maxSpeed = 4;
     this.perception = 100;
     this.radius = 5
     this.leader = leader;
+    this.pointCloud = generatePointCloud()
   }
   edges() {
     if (this.pos.x > bW) {
@@ -107,21 +109,56 @@ class Boid {
   }
   avoidence(planes) {
     let steering = createVector();
+    let genPointCloud = generatePointCloud();
+    let nVel = this.vel.copy()
+    nVel.normalize()
+    let furthestP = {
+      d: 0,
+      v: createVector()
+    };
 
-//     generatePointCloud;
-//     for (let b of planes) {
-//       boidUpdates++;
-//       if pointONPlane = true
-//       findFirstPonint not touching plane
-//       let d = other.pos.dist(this.pos)
-//       if (other != this && d < this.perception / 2) {
-//         let diff = p5.Vector.sub(this.pos, other.pos);
-//         diff.div(d * d)
-//         steering.add(diff);
-//         total++;
-       // }
-  
+    for (let p of planes) {
+
+      for (let vector of genPointCloud) {
+
+
+        let ray = new Ray(this.pos, vector)
+
+
+        let Psi = ray.intersect(p)
+        if (Psi == false) {
+
+          
+              
+              
+            }
+          }
+        }
+      }
+    }
+    
+    if (furthestP.d > 0) {
+      if (this.leader){
+        push();
+        fill(75, 190, 255)
+        stroke(0,255,0)
+        strokeWeight(3)
+        
+        line(furthestP.v.x,furthestP.v.y,furthestP.v.z,this.pos.x,this.pos.y,this.pos.z)
+        translate(furthestP.v.x,furthestP.v.y,furthestP.v.z)
+        noStroke()
+        sphere(2)
+        pop();
+      }
+      steering.add(furthestP.v)
+      steering.setMag(this.maxSpeed);
+      // steering = p5.Vector.cross(furthestP.v, this.vel);
+      steering.sub(this.vel)
+      steering.limit(this.maxForce + .2);
+    }
+    return steering;
   }
+
 
 
 
@@ -143,10 +180,12 @@ class Boid {
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
+    let avoidence = this.avoidence(planeArray);
     //print(alignment);
     this.acc.add(alignment);
     this.acc.add(cohesion);
     this.acc.add(seperation);
+    this.acc.add(avoidence)
   }
 
   update() {
