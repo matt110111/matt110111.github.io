@@ -110,54 +110,34 @@ class Boid {
   avoidence(planes) {
     let steering = createVector();
     let genPointCloud = generatePointCloud();
-    let nVel = this.vel.copy()
-    nVel.normalize()
+    let nVel = this.vel.copy();
+    nVel.normalize();
     let furthestP = {
-      d: 0,
+      t: 0,
       v: createVector()
-    };
+    }
+    let Psi;
 
     for (let p of planes) {
-
       for (let vector of genPointCloud) {
-
-
         let ray = new Ray(this.pos, vector)
+        Psi = ray.intersect(p)
+      }
+      if (!Psi && Psi != undefined && this.pos.dist(Psi)<this.perception) {
+        steering.add(Psi);
+        furthestP.t++
 
-
-        let Psi = ray.intersect(p)
-        if (Psi == false) {
-
-          
-              
-              
-            }
-          }
-        }
       }
     }
-    
-    if (furthestP.d > 0) {
-      if (this.leader){
-        push();
-        fill(75, 190, 255)
-        stroke(0,255,0)
-        strokeWeight(3)
-        
-        line(furthestP.v.x,furthestP.v.y,furthestP.v.z,this.pos.x,this.pos.y,this.pos.z)
-        translate(furthestP.v.x,furthestP.v.y,furthestP.v.z)
-        noStroke()
-        sphere(2)
-        pop();
-      }
-      steering.add(furthestP.v)
+    if (furthestP.t > 0) {
+      steering.div(furthestP.t);
       steering.setMag(this.maxSpeed);
-      // steering = p5.Vector.cross(furthestP.v, this.vel);
       steering.sub(this.vel)
-      steering.limit(this.maxForce + .2);
+      steering.limit(this.maxForce+20);
     }
     return steering;
   }
+
 
 
 
