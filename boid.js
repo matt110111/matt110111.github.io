@@ -136,6 +136,7 @@ class Boid {
           steering.normalize()
           this.furthestP.t++;
           
+          
 
         }
       }
