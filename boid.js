@@ -11,7 +11,8 @@ class Boid {
     this.perception = 100;
     this.radius = 5
     this.leader = leader;
-    this.pointCloud = generatePointCloud()
+    this.pointCloud = generatePointCloud();
+    this.heading_for_collision = false;
   }
   edges() {
     if (this.pos.x > bW) {
@@ -112,28 +113,48 @@ class Boid {
     let genPointCloud = generatePointCloud();
     let nVel = this.vel.copy();
     nVel.normalize();
-    let furthestP = {
+    this.furthestP = {
       t: 0,
       v: createVector()
     }
     let Psi;
-
+    this.heading_for_collision = false;
     for (let p of planes) {
       for (let vector of genPointCloud) {
         let ray = new Ray(this.pos, vector)
         Psi = ray.intersect(p)
-      }
-      if (!Psi && Psi != undefined && this.pos.dist(Psi)<this.perception) {
-        steering.add(Psi);
-        furthestP.t++
 
+        if (Psi) {
+          if (this.pos.dist(Psi) < this.perception) {
+            this.heading_for_collision = true;
+          }
+
+
+        }
+        if (this.heading_for_collision) {
+          steering.add(vector);
+          steering.normalize()
+          this.furthestP.t++;
+          
+
+        }
       }
+
+      //this.heading_for_collision = false;
     }
-    if (furthestP.t > 0) {
-      steering.div(furthestP.t);
+    
+    if (this.furthestP.t > 0) {
+      //print(this.furthestP.t)
+      steering.div(this.furthestP.t);
+      this.furthestP.t = 0;
+      push()
+      stroke(255, 0, 0)
+      translate(this.pos.x, this.pos.y, this.pos.z)
+      line(0, 0, 0, steering.x * 50, steering.y * 50, steering.z * 50)
+      pop()
       steering.setMag(this.maxSpeed);
       steering.sub(this.vel)
-      steering.limit(this.maxForce+20);
+      steering.limit(this.maxForce);
     }
     return steering;
   }
