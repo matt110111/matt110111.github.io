@@ -31,9 +31,6 @@ function setup() {
   h1 = createElement("P", "Number of boid updates p/s:");
   boidUpdates_ = createElement("H1", "Waiting..");
 
-  for (let i = 0; i < 5; i++) {
-    //boids.push(new Boid());
-  }
   boids.push(new Boid(true));
   noStroke();
 
@@ -53,7 +50,7 @@ function draw() {
   rotateX(HALF_PI);
   rotateZ((PI / 4) + .02);
   for (let p of planeArray) {
-    p.debugminmax();
+    // p.debugminmax();
   }
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
   boundary.show()

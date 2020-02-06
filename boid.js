@@ -111,23 +111,37 @@ class Boid {
   }
   awareness(planes) {
     let ray = new Ray(this.pos, this.vel, this.perception);
-    
+
     ray.show(true);
     for (let p of planes) {
       let intersect = ray.intersect(p);
       if (intersect) {
         if (p5.Vector.dist(ray.p, intersect) <= 1) {
           this.collided = true;
+          return true;
         }
       }
     }
   }
   avoidence(planes) {
     let steering = createVector();
-    for (let p of planes) {
-      let intersect = ray.intersect(p);
-      if (intersect) {
+    let vectors = generatePointCloud();
 
+    for (let v of vectors) {
+      let ray = new Ray(this.pos, v, this.perception)
+      for (let p of planes) {
+        let intersect = ray.intersects(p);
+        if (intersect) {
+          if (p5.Vector.dist(this.pos, intersect) < this.perception) {
+            push()
+            stroke(0, 255, 0)
+            strokeWeight(2)
+            line(this.pos.x, this.pos.y, this.pos.z, intersect.x, intersect.y, intersect.z)
+            pop()
+          }
+        }
+      }
+    }
   }
 
 
@@ -151,9 +165,10 @@ class Boid {
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
-    this.awareness(planeArray);
-    let avoidence = this.avoidence(planeArray);
-    //print(alignment);
+    if (this.awareness(planeArray)) {
+      let avoidence = this.avoidence(planeArray);
+
+    }
     this.acc.add(alignment);
     this.acc.add(cohesion);
     this.acc.add(seperation);
