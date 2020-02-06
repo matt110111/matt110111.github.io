@@ -1,0 +1,24 @@
+# Summary
+
+Date : 2020-02-06 04:20:25
+
+Directory c:\Users\matthew.johnson\Desktop\matt110111.github.io
+
+Total : 8 files,  605 codes, 39 comments, 106 blanks, all 750 lines
+
+[details](details.md)
+
+## Languages
+| language | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| JavaScript | 5 | 564 | 37 | 91 | 692 |
+| CSS | 1 | 21 | 2 | 10 | 33 |
+| HTML | 1 | 19 | 0 | 5 | 24 |
+| YAML | 1 | 1 | 0 | 0 | 1 |
+
+## Directories
+| path | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| . | 8 | 605 | 39 | 106 | 750 |
+
+[details](details.md)

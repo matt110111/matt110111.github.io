@@ -1,49 +1,40 @@
 class Ray {
-  constructor(v, d) {
+  constructor(v, d, length = 50) {
     this.pos = v;
     this.dir = d;
-
-
-  }
-  show() {
-    push();
-    noStroke()
-    fill(255,255,150)
-    translate(this.pos.x,this.pos.y,this.pos.z)
-    translate(this.dir.x * 100, this.dir.y * 100, this.dir.z * 100)
-    sphere(2)
-    pop();
-
+    this.length = length;
+    this.p = this.pos.copy()
+    this.d = d;
+    this.d = this.d.normalize()
+    //this.p.add(this.d)
+    //this.p.mult(this.length)
+    this.p = createVector(this.p.x + this.d.x*this.length, this.p.y + this.d.y*this.length, this.p.z + this.d.z*this.length)
 
 
   }
 
   intersect(Plane) {
-
-
-    let d = p5.Vector.dot(Plane.normal,Plane.b);
-    
-    if (p5.Vector.dot(Plane.normal, this.dir) == 0){
+    let d = p5.Vector.dot(Plane.normal, Plane.b);
+    if (p5.Vector.dot(Plane.normal, this.dir) == 0) {
       return false;
     }
-    let x = (d - p5.Vector.dot(Plane.normal, this.pos)) / p5.Vector.dot(Plane.normal, this.dir);
-    let v = p5.Vector.mult(this.dir,x);
-    let c = p5.Vector.add(this.pos, v);
+    let x = (d - p5.Vector.dot(Plane.normal, this.p)) / p5.Vector.dot(Plane.normal, this.dir);
+    let v = p5.Vector.mult(this.dir, x);
+    let c = p5.Vector.add(this.p, v);
     return c;
   }
+  show(collided) {
 
-
+    push();
+    noStroke();
+    if (!collided) {
+      fill(255, 255, 150);
+    } else {
+      fill(255, 0, 255);
+    }
+    //translate(this.pos.x, this.pos.y, this.pos.z)
+    translate(this.p.x, this.p.y, this.p.z)
+    sphere(5)
+    pop();
+  }
 }
-// float d = Dot(normal, coord);
-
-// if (Dot(normal, ray) == 0) {
-//     return false; // No intersection, the line is parallel to the plane
-// }
-
-
-//  // Compute the X value for the directed line ray intersecting the plane
-//  float x = (d - Dot(normal, rayOrigin)) / Dot(normal, ray);
-
-//  // output contact point
-//  *contact = rayOrigin + normalize(ray)*x; //Make sure your ray vector is normalized
-//  return true;

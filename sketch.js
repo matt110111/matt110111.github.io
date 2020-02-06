@@ -2,7 +2,7 @@ let boids = [];
 let bW = 600;
 let bH = 600;
 let bD = 600;
-
+let Haltdebug = false;
 
 
 
@@ -37,30 +37,24 @@ function setup() {
   boids.push(new Boid(true));
   noStroke();
 
-  planeArray.push(new Plane(createVector(0, 0, 0), createVector(600, 0, 600), createVector(0, 0, 600)));
-  planeArray.push(new Plane(createVector(600, 0, 600), createVector(600, 600, 600), createVector(600, 0, 0)));
-  planeArray.push(new Plane(createVector(600, 600, 0), createVector(0, 600, 600), createVector(600, 600, 600)));
-  planeArray.push(new Plane(createVector(0, 600, 600), createVector(0, 0, 0), createVector(0, 600, 0)));
-  planeArray.push(new Plane(createVector(600, 600, 600), createVector(0, 0, 600), createVector(600, 0, 600)));
-  planeArray.push(new Plane(createVector(600, 0, 0), createVector(0, 600, 0), createVector(600, 600, 0)));
+  planeArray.push(new Plane(createVector(0, 0, 0), createVector(600, 0, 600), createVector(0, 0, 600), createVector(0, 0, 0), createVector(600, 0, 600)));
+  planeArray.push(new Plane(createVector(600, 0, 600), createVector(600, 600, 600), createVector(600, 0, 0), createVector(600, 0, 0), createVector(600, 600, 600)));
+  planeArray.push(new Plane(createVector(600, 600, 0), createVector(0, 600, 600), createVector(600, 600, 600), createVector(0, 600, 600), createVector(600, 600, 0)));
+  planeArray.push(new Plane(createVector(0, 600, 600), createVector(0, 0, 0), createVector(0, 600, 0), createVector(0, 600, 600), createVector(600, 0, 600)));
+  planeArray.push(new Plane(createVector(600, 600, 600), createVector(0, 0, 600), createVector(600, 0, 600), createVector(0, 0, 600), createVector(600, 0, 600)));
+  planeArray.push(new Plane(createVector(600, 0, 0), createVector(0, 600, 0), createVector(600, 600, 0), createVector(0, 600, 0), createVector(600, 0, 0)));
 
 }
 
 function draw() {
   background("#282828");
-
   orbitControl();
-
-
-
   translate(bW - bW, bH - bH / 2, -bD * 1.5);
   rotateX(HALF_PI);
   rotateZ((PI / 4) + .02);
-
-
-
-
-
+  for (let p of planeArray) {
+    p.debugminmax();
+  }
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
   boundary.show()
   ot = new Octree(boundary, 4, 0);
@@ -75,28 +69,23 @@ function draw() {
     let point = new Point(b.pos.x, b.pos.y, b.pos.z, b);
     ot.insert(point)
   }
-
-
   if (sub_division_view) {
 
     drawSub(ot, sub_division_depth)
   }
-
-
   for (let i = 0; i < boids.length; i++) {
-    boids[i].edges();
+    if (!Haltdebug) {
+      boids[i].edges();
+      
+      boids[i].update();
+    }
     boids[i].flock(boids, ot);
-    boids[i].update();
     boids[i].show();
   }
-
 }
-
-
 
 function boid_range_shape_Changed() {
   boid_range_shape = boid_range_shape_.value()
-
 }
 
 function perceptionViewCheck() {
@@ -114,7 +103,6 @@ function subdivisionCheck() {
     sub_division_view = false;
   }
 }
-
 
 function generatePointCloud() {
   let viewDensity = 75

@@ -13,6 +13,7 @@ class Boid {
     this.leader = leader;
     this.pointCloud = generatePointCloud();
     this.heading_for_collision = false;
+    this.collided = false;
   }
   edges() {
     if (this.pos.x > bW) {
@@ -108,59 +109,26 @@ class Boid {
     return steering;
 
   }
-  avoidence(planes) {
-    let steering = createVector();
-    let genPointCloud = generatePointCloud();
-    let nVel = this.vel.copy();
-    nVel.normalize();
-    this.furthestP = {
-      t: 0,
-      v: createVector()
-    }
-    let Psi;
-    this.heading_for_collision = false;
+  awareness(planes) {
+    let ray = new Ray(this.pos, this.vel, this.perception);
+    
+    ray.show(true);
     for (let p of planes) {
-      for (let vector of genPointCloud) {
-        let ray = new Ray(this.pos, vector)
-        Psi = ray.intersect(p)
-
-        if (Psi) {
-          if (this.pos.dist(Psi) < this.perception) {
-            this.heading_for_collision = true;
-          }
-
-
-        }
-        if (this.heading_for_collision) {
-          steering.add(vector);
-          steering.normalize()
-          this.furthestP.t++;
-
-          
-          
-
+      let intersect = ray.intersect(p);
+      if (intersect) {
+        if (p5.Vector.dist(ray.p, intersect) <= 1) {
+          this.collided = true;
         }
       }
-
-      //this.heading_for_collision = false;
     }
-    
-    if (this.furthestP.t > 0) {
-      //print(this.furthestP.t)
-      steering.div(this.furthestP.t);
-      this.furthestP.t = 0;
-      push()
-      stroke(255, 0, 0)
-      translate(this.pos.x, this.pos.y, this.pos.z)
-      line(0, 0, 0, steering.x * 50, steering.y * 50, steering.z * 50)
-      pop()
-      steering.setMag(this.maxSpeed);
-      steering.sub(this.vel)
-      steering.limit(this.maxForce);
-    }
-    return steering;
   }
+  avoidence(planes) {
+    let steering = createVector();
+    for (let p of planes) {
+      let intersect = ray.intersect(p);
+      if (intersect) {
 
+  }
 
 
 
@@ -183,12 +151,13 @@ class Boid {
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
+    this.awareness(planeArray);
     let avoidence = this.avoidence(planeArray);
     //print(alignment);
     this.acc.add(alignment);
     this.acc.add(cohesion);
     this.acc.add(seperation);
-    this.acc.add(avoidence)
+    //this.acc.add(avoidence)
   }
 
   update() {
