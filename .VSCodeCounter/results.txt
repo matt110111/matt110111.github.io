@@ -1,12 +1,12 @@
-Date : 2020-02-06 04:20:25
+Date : 2020-02-07 07:09:42
 Directory : c:\Users\matthew.johnson\Desktop\matt110111.github.io
-Total : 8 files,  605 codes, 39 comments, 106 blanks, all 750 lines
+Total : 8 files,  609 codes, 38 comments, 109 blanks, all 756 lines
 
 Languages
 +------------+------------+------------+------------+------------+------------+
 | language   | files      | code       | comment    | blank      | total      |
 +------------+------------+------------+------------+------------+------------+
-| JavaScript |          5 |        564 |         37 |         91 |        692 |
+| JavaScript |          5 |        568 |         36 |         94 |        698 |
 | CSS        |          1 |         21 |          2 |         10 |         33 |
 | HTML       |          1 |         19 |          0 |          5 |         24 |
 | YAML       |          1 |          1 |          0 |          0 |          1 |
@@ -16,7 +16,7 @@ Directories
 +-------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                              | files      | code       | comment    | blank      | total      |
 +-------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                                 |          8 |        605 |         39 |        106 |        750 |
+| .                                                                 |          8 |        609 |         38 |        109 |        756 |
 +-------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
@@ -24,12 +24,12 @@ Files
 | filename                                                          | language   | code       | comment    | blank      | total      |
 +-------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | c:\Users\matthew.johnson\Desktop\matt110111.github.io\_config.yml | YAML       |          1 |          0 |          0 |          1 |
-| c:\Users\matthew.johnson\Desktop\matt110111.github.io\boid.js     | JavaScript |        155 |          4 |         25 |        184 |
+| c:\Users\matthew.johnson\Desktop\matt110111.github.io\boid.js     | JavaScript |        186 |          6 |         29 |        221 |
 | c:\Users\matthew.johnson\Desktop\matt110111.github.io\index.html  | HTML       |         19 |          0 |          5 |         24 |
 | c:\Users\matthew.johnson\Desktop\matt110111.github.io\octree.js   | JavaScript |        223 |         29 |         36 |        288 |
-| c:\Users\matthew.johnson\Desktop\matt110111.github.io\plane.js    | JavaScript |         50 |          0 |          6 |         56 |
-| c:\Users\matthew.johnson\Desktop\matt110111.github.io\ray.js      | JavaScript |         33 |          3 |          4 |         40 |
-| c:\Users\matthew.johnson\Desktop\matt110111.github.io\sketch.js   | JavaScript |        103 |          1 |         20 |        124 |
+| c:\Users\matthew.johnson\Desktop\matt110111.github.io\plane.js    | JavaScript |         27 |          0 |          2 |         29 |
+| c:\Users\matthew.johnson\Desktop\matt110111.github.io\ray.js      | JavaScript |         33 |          1 |          6 |         40 |
+| c:\Users\matthew.johnson\Desktop\matt110111.github.io\sketch.js   | JavaScript |         99 |          0 |         21 |        120 |
 | c:\Users\matthew.johnson\Desktop\matt110111.github.io\style.css   | CSS        |         21 |          2 |         10 |         33 |
-| Total                                                             |            |        605 |         39 |        106 |        750 |
+| Total                                                             |            |        609 |         38 |        109 |        756 |
 +-------------------------------------------------------------------+------------+------------+------------+------------+------------+

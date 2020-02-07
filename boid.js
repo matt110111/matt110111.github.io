@@ -110,8 +110,13 @@ class Boid {
 
   }
   awareness(planes) {
+    /*
+    Rebuild this function to utilize the bounds of the cube instead of ray casting
+      current 
+      Theory: boolean logic will be much faset than vector math
+        result:
+    */
     let ray = new Ray(this.pos, this.vel, this.perception);
-
     ray.show(true);
     for (let p of planes) {
       let intersect = ray.intersect(p);
@@ -124,6 +129,11 @@ class Boid {
     }
   }
   avoidence(planes) {
+    /*
+    Idea one:
+      sum all the points intersecting with the closest plane, store the intersection in a variable test agaist all planes for closest.
+    */
+
     let steering = createVector();
     let vectors = generatePointCloud();
     let drawn = false;
