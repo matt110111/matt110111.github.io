@@ -7,7 +7,7 @@ class Ray {
     this.d = d.copy();
     this.d = this.d.normalize()
 
-    this.p = createVector(this.p.x + this.d.x*this.length, this.p.y + this.d.y*this.length, this.p.z + this.d.z*this.length)
+    this.p = createVector(this.p.x + this.d.x * this.length, this.p.y + this.d.y * this.length, this.p.z + this.d.z * this.length)
 
 
   }
@@ -17,23 +17,12 @@ class Ray {
     if (p5.Vector.dot(Plane.normal, this.dir) == 0) {
       return false;
     }
-    let x = (d - p5.Vector.dot(Plane.normal, this.p)) / p5.Vector.dot(Plane.normal, this.dir);
-    let v = p5.Vector.mult(this.dir, x);
-    let c = p5.Vector.add(this.p, v);
-    return c;
-  }
-  intersects(Plane){
-    let d = p5.Vector.dot(Plane.normal, Plane.b);
-    if (p5.Vector.dot(Plane.normal, this.dir) == 0) {
-      return false;
-    }
     let x = (d - p5.Vector.dot(Plane.normal, this.pos)) / p5.Vector.dot(Plane.normal, this.dir);
-    let v = p5.Vector.mult(this.pos, x);
+    let v = p5.Vector.mult(this.dir, x);
     let c = p5.Vector.add(this.pos, v);
     return c;
-
-
   }
+
   show(collided) {
 
     push();
@@ -45,7 +34,7 @@ class Ray {
     }
     //translate(this.pos.x, this.pos.y, this.pos.z)
     translate(this.p.x, this.p.y, this.p.z)
-    sphere(5)
+    sphere(1)
     pop();
   }
 }

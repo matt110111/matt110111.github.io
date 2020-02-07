@@ -30,17 +30,19 @@ function setup() {
   show_player_perception.changed(perceptionViewCheck);
   h1 = createElement("P", "Number of boid updates p/s:");
   boidUpdates_ = createElement("H1", "Waiting..");
-
+  for (let i = 0;i<0;i++){
+    boids.push(new Boid());
+  }
   boids.push(new Boid(true));
   noStroke();
 
   planeArray.push(new Plane(createVector(0, 0, 0), createVector(600, 0, 600), createVector(0, 0, 600), createVector(0, 0, 0), createVector(600, 0, 600)));
   planeArray.push(new Plane(createVector(600, 0, 600), createVector(600, 600, 600), createVector(600, 0, 0), createVector(600, 0, 0), createVector(600, 600, 600)));
-  planeArray.push(new Plane(createVector(600, 600, 0), createVector(0, 600, 600), createVector(600, 600, 600), createVector(0, 600, 600), createVector(600, 600, 0)));
+  planeArray.push(new Plane(createVector(600, 600, 0), createVector(0, 600, 600), createVector(600, 600, 600), createVector(600, 600, 0) ,createVector(0, 600, 600)));
   planeArray.push(new Plane(createVector(0, 600, 600), createVector(0, 0, 0), createVector(0, 600, 0), createVector(0, 600, 600), createVector(600, 0, 600)));
   planeArray.push(new Plane(createVector(600, 600, 600), createVector(0, 0, 600), createVector(600, 0, 600), createVector(0, 0, 600), createVector(600, 0, 600)));
   planeArray.push(new Plane(createVector(600, 0, 0), createVector(0, 600, 0), createVector(600, 600, 0), createVector(0, 600, 0), createVector(600, 0, 0)));
-
+  
 }
 
 function draw() {
@@ -49,9 +51,8 @@ function draw() {
   translate(bW - bW, bH - bH / 2, -bD * 1.5);
   rotateX(HALF_PI);
   rotateZ((PI / 4) + .02);
-  for (let p of planeArray) {
-    // p.debugminmax();
-  }
+  
+  
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
   boundary.show()
   ot = new Octree(boundary, 4, 0);
@@ -71,11 +72,9 @@ function draw() {
     drawSub(ot, sub_division_depth)
   }
   for (let i = 0; i < boids.length; i++) {
-    if (!Haltdebug) {
-      boids[i].edges();
-      
-      boids[i].update();
-    }
+    boids[i].edges();
+    boids[i].update();
+    
     boids[i].flock(boids, ot);
     boids[i].show();
   }
@@ -102,7 +101,7 @@ function subdivisionCheck() {
 }
 
 function generatePointCloud() {
-  let viewDensity = 75
+  let viewDensity = 10
   let Array = []
   let goldenRatio = (1 + sqrt(5)) / 2;
   let angleIncrement = PI * 2 * goldenRatio;

@@ -10,47 +10,20 @@ class Plane {
 
     this.normal = createVector(this.A, this.B, this.C);
     this.normal.normalize();
-    this.minV = minV;
-    this.maxV = maxV;
-  }
-  bounds(point) {
-    if (point.x >= this.a.x && point.y >= this.a.y && point.z >= this.a.z) {
-      return true;
-    } else if (point.x <= this.b.x && point.y <= this.b.y && point.z <= this.b.z) {
-
-    }
-
-
-  }
-
-  debugminmax() {
-    push();
-    fill(255, 0, 0);
-    translate(this.minV.x, this.minV.y, this.minV.z);
-    sphere(5);
-    pop();
-    push();
-    fill(0, 255, 0);
-    translate(this.maxV.x, this.maxV.y, this.maxV.z);
-    sphere(5);
-    pop();
     
   }
-  debug() {
-    push();
-    fill(255, 0, 0);
-    translate(this.a.x, this.a.y, this.a.z);
-    sphere(20);
-    pop();
-    push();
-    fill(0, 255, 0);
-    translate(this.b.x, this.b.y, this.b.z);
-    sphere(15);
-    pop();
-    push();
-    fill(0, 0, 255);
-    translate(this.c.x, this.c.y, this.c.z);
-    sphere(10);
-    pop();
+  bounds(point) {
+    let X_min = 0;
+    let X_max = 600;
+    let Y_min = 0;
+    let Y_max = 600;
+    let Z_min = 0;
+    let Z_max = 600;
+    if (X_min <= point.x <= X_max && Y_min <= point.y <= Y_max && Z_min <= point.z <= Z_max){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }
