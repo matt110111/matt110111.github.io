@@ -117,17 +117,29 @@ class Boid {
         result:
     */
     let ray = new Ray(this.pos, this.vel, this.perception);
-    ray.show(true);
+    this.collided = false
     for (let p of planes) {
-      let intersect = ray.intersect(p);
+      let intersect = ray.intersect(p, false);
       if (intersect) {
-        if (p5.Vector.dist(ray.p, intersect) <= 1) {
+        let distance = p5.Vector.dist(ray.p, intersect);
+//Obviously the ray can't be 
+        if (!p.bounds(ray.p)) {
           this.collided = true;
-          return true;
+          print("collided")
+
+
         }
+
       }
     }
+    if (!this.collided){
+      ray.show(true)
+    }
   }
+
+
+
+
   avoidence(planes) {
     /*
     Idea one:
@@ -136,42 +148,14 @@ class Boid {
 
     let steering = createVector();
     let vectors = generatePointCloud();
-    let drawn = false;
-    let counter = 0;
     for (let v of vectors) {
-      drawn = false;
       let ray = new Ray(this.pos, v, this.perception)
-      for (let p of planes) {
         let intersect = ray.intersect(p);
-        if (intersect&& !drawn) {
-          let distance =  p5.Vector.dist(this.pos, intersect);
-          if (distance > this.perception) {
-            push()
-            stroke(0,255,0);
-            strokeWeight(1);
-            //line(this.pos.x,this.pos.y,this.pos.z,this.pos.x+v.x*this.perception,this.pos.y+v.y*this.perception,this.pos.z+v.z*this.perception)
-            pop();
-            
-            //drawn = true;
-          }
-          else if( distance < this.perception){
-            push();
-            stroke(255,0,0);
-            strokeWeight(1);
-            line(this.pos.x,this.pos.y,this.pos.z,intersect.x,intersect.y,intersect.z)
-            pop();
-            //drawn = true;
-          }
-        }
-
-      }
-    }
-    if (counter > 0) {
 
       steering.setMag(this.maxSpeed * 2);
       steering.limit(this.maxForce);
     }
-    return steering;
+    //return steering;
   }
 
 
@@ -197,14 +181,14 @@ class Boid {
     let seperation = this.seperation(filteredBoids);
     // let avoidence;
     // if (this.awareness(planeArray)) {
-    let avoidence = this.avoidence(planeArray);
+    let avoidence = this.awareness(planeArray);
     // }
     this.acc.add(alignment);
     this.acc.add(cohesion);
     this.acc.add(seperation);
-    if (avoidence != undefined) {
-      this.acc.add(avoidence);
-    }
+    //if (avoidence != undefined) {
+    // this.acc.add(avoidence);
+    //}
   }
 
   update() {

@@ -6,21 +6,30 @@ class Ray {
     this.p = this.pos.copy()
     this.d = d.copy();
     this.d = this.d.normalize()
-
     this.p = createVector(this.p.x + this.d.x * this.length, this.p.y + this.d.y * this.length, this.p.z + this.d.z * this.length)
 
 
   }
 
-  intersect(Plane) {
+  intersect(Plane, pos = true) {
     let d = p5.Vector.dot(Plane.normal, Plane.b);
-    if (p5.Vector.dot(Plane.normal, this.dir) == 0) {
-      return false;
+    if (pos) {
+      if (p5.Vector.dot(Plane.normal, this.dir) == 0) {
+        return false;
+      }
+      let x = (d - p5.Vector.dot(Plane.normal, this.pos)) / p5.Vector.dot(Plane.normal, this.dir);
+      let v = p5.Vector.mult(this.dir, x);
+      let c = p5.Vector.add(this.pos, v);
+      return c;
+    } else {
+      if (p5.Vector.dot(Plane.normal, this.d) == 0) {
+        return false;
+      }
+      let x = (d - p5.Vector.dot(Plane.normal, this.p)) / p5.Vector.dot(Plane.normal, this.d);
+      let v = p5.Vector.mult(this.d, x);
+      let c = p5.Vector.add(this.p, v);
+      return c;
     }
-    let x = (d - p5.Vector.dot(Plane.normal, this.pos)) / p5.Vector.dot(Plane.normal, this.dir);
-    let v = p5.Vector.mult(this.dir, x);
-    let c = p5.Vector.add(this.pos, v);
-    return c;
   }
 
   show(collided) {
@@ -34,7 +43,7 @@ class Ray {
     }
     //translate(this.pos.x, this.pos.y, this.pos.z)
     translate(this.p.x, this.p.y, this.p.z)
-    sphere(1)
+    sphere(5)
     pop();
   }
 }
