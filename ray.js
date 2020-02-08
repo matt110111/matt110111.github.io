@@ -37,13 +37,13 @@ class Ray {
     push();
     noStroke();
     if (!collided) {
-      fill(255, 255, 150);
+      fill(0, 255, 0);
     } else {
-      fill(255, 0, 255);
+      fill(255, 0, 0);
     }
     //translate(this.pos.x, this.pos.y, this.pos.z)
     translate(this.p.x, this.p.y, this.p.z)
-    sphere(5)
+    sphere(2)
     pop();
   }
 }

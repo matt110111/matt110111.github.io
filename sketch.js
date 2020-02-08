@@ -101,7 +101,7 @@ function subdivisionCheck() {
 }
 
 function generatePointCloud() {
-  let viewDensity = 10
+  let viewDensity = 85
   let Array = []
   let goldenRatio = (1 + sqrt(5)) / 2;
   let angleIncrement = PI * 2 * goldenRatio;

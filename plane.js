@@ -1,5 +1,5 @@
 class Plane {
-  constructor(vector1, vector2, vector3, minV,maxV) {
+  constructor(vector1, vector2, vector3, minV, maxV) {
     this.a = vector1;
     this.b = vector2;
     this.c = vector3;
@@ -10,20 +10,17 @@ class Plane {
 
     this.normal = createVector(this.A, this.B, this.C);
     this.normal.normalize();
-    
+
   }
-  bounds(point) {
+  bounds(points) {
     let X_min = 0;
     let X_max = 600;
     let Y_min = 0;
     let Y_max = 600;
     let Z_min = 0;
     let Z_max = 600;
-    if (X_min <= point.x <= X_max && Y_min <= point.y <= Y_max && Z_min <= point.z <= Z_max){
+    if (X_min <= points.x && points.x <= X_max && Y_min <= points.y && points.y <= Y_max && Z_min <= points.z && points.z <= Z_max) {
       return true;
-    }
-    else{
-      return false;
     }
   }
 }

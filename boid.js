@@ -2,7 +2,7 @@ class Boid {
 
   constructor(leader = false) {
     this.pos = createVector(random(width), random(height), random(height));
-    this.vel = p5.Vector.random3D();
+    this.vel = createVector(10, 10, 10);
     this.vel.setMag(random(-4, 4));
 
     this.acc = createVector();
@@ -110,30 +110,20 @@ class Boid {
 
   }
   awareness(planes) {
-    /*
-    Rebuild this function to utilize the bounds of the cube instead of ray casting
-      current 
-      Theory: boolean logic will be much faset than vector math
-        result:
-    */
+    let distance = 4;
+
     let ray = new Ray(this.pos, this.vel, this.perception);
-    this.collided = false
+    //ray.show(false)
     for (let p of planes) {
-      let intersect = ray.intersect(p, false);
-      if (intersect) {
-        let distance = p5.Vector.dist(ray.p, intersect);
-//Obviously the ray can't be 
-        if (!p.bounds(ray.p)) {
-          this.collided = true;
-          print("collided")
-
-
-        }
-
+      if (ray.intersect(p))
+        distance = p5.Vector.dist(ray.p, ray.intersect(p))
+      //print(distance)
+      if (!planeArray[0].bounds(ray.p) || distance < 4) {
+        this.collided = true;
+        ray.show(true);
+      } else {
+        this.collided = false;
       }
-    }
-    if (!this.collided){
-      ray.show(true)
     }
   }
 
@@ -141,75 +131,85 @@ class Boid {
 
 
   avoidence(planes) {
-    /*
-    Idea one:
-      sum all the points intersecting with the closest plane, store the intersection in a variable test agaist all planes for closest.
-    */
 
     let steering = createVector();
     let vectors = generatePointCloud();
+    let drawn = false;
     for (let v of vectors) {
+
       let ray = new Ray(this.pos, v, this.perception)
-        let intersect = ray.intersect(p);
+      for (let p of planes) {
+        let intersect = ray .intersect(p);
 
-      steering.setMag(this.maxSpeed * 2);
-      steering.limit(this.maxForce);
+        if (intersect) {
+          let distance = p5.Vector.dist(ray.pos, intersect)
+          if (distance < this.perception && p.bounds(intersect)) {
+            push()
+            //translate(ray.pos.x, ray.pos.y, ray.pos.z)
+            strokeWeight(2)
+            stroke(255, 0, 0)
+            line(this.pos.x, this.pos.y, this.pos.z, ray.p.x, ray.p.y, ray.p.z)
+            pop()
+          }
+          drawn = true;
+        
+      }
     }
-    //return steering;
+  }
+  return steering;
+}
+
+
+
+
+
+flock(boids, ot) {
+  let range;
+  if (boid_range_shape == 'Box') {
+    range = new Box(this.pos.x, this.pos.y, this.pos.z, this.perception, this.perception, this.perception);
+  } else {
+    range = new Sphere(this.pos.x, this.pos.y, this.pos.z, this.perception);
   }
 
-
-
-
-
-  flock(boids, ot) {
-    let range;
-    if (boid_range_shape == 'Box') {
-      range = new Box(this.pos.x, this.pos.y, this.pos.z, this.perception, this.perception, this.perception);
-    } else {
-      range = new Sphere(this.pos.x, this.pos.y, this.pos.z, this.perception);
-    }
-
-    if (perception_mask) {
-      range.show()
-    }
-
-    let filteredBoids = ot.query(range);
-
-    let alignment = this.align(filteredBoids);
-    let cohesion = this.cohesion(filteredBoids);
-    let seperation = this.seperation(filteredBoids);
-    // let avoidence;
-    // if (this.awareness(planeArray)) {
-    let avoidence = this.awareness(planeArray);
-    // }
-    this.acc.add(alignment);
-    this.acc.add(cohesion);
-    this.acc.add(seperation);
-    //if (avoidence != undefined) {
-    // this.acc.add(avoidence);
-    //}
+  if (perception_mask) {
+    range.show()
   }
 
-  update() {
-    this.pos.add(this.vel);
-    this.vel.add(this.acc);
-    this.vel.limit(this.maxSpeed);
-    this.acc.mult(0);
+  let filteredBoids = ot.query(range);
+
+  let alignment = this.align(filteredBoids);
+  let cohesion = this.cohesion(filteredBoids);
+  let seperation = this.seperation(filteredBoids);
+  // let avoidence;
+  // if (this.awareness(planeArray)) {
+  this.awareness(planeArray);
+  // }
+  this.acc.add(alignment);
+  this.acc.add(cohesion);
+  this.acc.add(seperation);
+  if (this.collided) {
+    this.avoidence(planeArray);
   }
+}
 
-  show() {
-    push();
-    translate(this.pos.x, this.pos.y, this.pos.z);
-    noStroke();
+update() {
+  this.pos.add(this.vel);
+  this.vel.add(this.acc);
+  this.vel.limit(this.maxSpeed);
+  this.acc.mult(0);
+}
 
-    if (!this.leader) {
-      fill("#00AAFF");
-    } else {
-      fill(255, 0, 0);
-    }
-    sphere(5);
-    pop();
-
+show() {
+  push();
+  translate(this.pos.x, this.pos.y, this.pos.z);
+  noStroke();
+  if (!this.leader) {
+    fill("#00AAFF");
+  } else {
+    fill(255, 0, 0);
   }
+  sphere(5);
+  pop();
+
+}
 }
