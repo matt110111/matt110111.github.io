@@ -2,7 +2,7 @@ class Boid {
 
   constructor(leader = false) {
     this.pos = createVector(random(width), random(height), random(height));
-    this.vel = createVector(10, 10, 10);
+    this.vel = createVector(-10, 0, -10);
     this.vel.setMag(random(-4, 4));
 
     this.acc = createVector();
@@ -121,6 +121,7 @@ class Boid {
       if (!planeArray[0].bounds(ray.p) || distance < 4) {
         this.collided = true;
         ray.show(true);
+
       } else {
         this.collided = false;
       }
@@ -135,81 +136,100 @@ class Boid {
     let steering = createVector();
     let vectors = generatePointCloud();
     let drawn = false;
+    let lstOfVs = []
+    let idealLine = createVector()
     for (let v of vectors) {
 
       let ray = new Ray(this.pos, v, this.perception)
       for (let p of planes) {
-        let intersect = ray .intersect(p);
-
+        let intersect = ray.intersect(p);
+        // if it intersects its within the boundary and its outside of perception radius
         if (intersect) {
           let distance = p5.Vector.dist(ray.pos, intersect)
           if (distance < this.perception && p.bounds(intersect)) {
-            push()
-            //translate(ray.pos.x, ray.pos.y, ray.pos.z)
-            strokeWeight(2)
-            stroke(255, 0, 0)
-            line(this.pos.x, this.pos.y, this.pos.z, ray.p.x, ray.p.y, ray.p.z)
-            pop()
+            lstOfVs.push(v)
+            // push()
+            // strokeWeight(2)
+            // stroke(255, 0, 0)
+            // line(this.pos.x, this.pos.y, this.pos.z, intersect.x, intersect.y, intersect.z)
+            // pop()
           }
-          drawn = true;
-        
+        }
       }
     }
+    for (let v of vectors) {
+      if (!lstOfVs.includes(v)) {
+        // push()
+        // strokeWeight(2)
+        // stroke(255, 0, 0)
+        // line(this.pos.x, this.pos.y, this.pos.z, this.pos.x + v.x * this.perception, this.pos.y + v.y * this.perception, this.pos.z + v.z * this.perception)
+        // pop()
+        steering.sub(v)
+      }
+      steering.normalize()
+      push()
+      strokeWeight(2)
+      stroke(0, 255, 0)
+      line(this.pos.x, this.pos.y, this.pos.z, this.pos.x + steering.x * this.perception, this.pos.y + steering.y * this.perception, this.pos.z + steering.z * this.perception)
+      pop()
+    }
+    steering.setMag(this.maxSpeed);
+    steering.add(this.vel);
+    steering.limit(this.maxForce*2);
+    return steering;
   }
-  return steering;
-}
 
 
 
 
 
-flock(boids, ot) {
-  let range;
-  if (boid_range_shape == 'Box') {
-    range = new Box(this.pos.x, this.pos.y, this.pos.z, this.perception, this.perception, this.perception);
-  } else {
-    range = new Sphere(this.pos.x, this.pos.y, this.pos.z, this.perception);
+  flock(boids, ot) {
+    let range;
+    if (boid_range_shape == 'Box') {
+      range = new Box(this.pos.x, this.pos.y, this.pos.z, this.perception, this.perception, this.perception);
+    } else {
+      range = new Sphere(this.pos.x, this.pos.y, this.pos.z, this.perception);
+    }
+
+    if (perception_mask) {
+      range.show()
+    }
+
+    let filteredBoids = ot.query(range);
+
+    let alignment = this.align(filteredBoids);
+    let cohesion = this.cohesion(filteredBoids);
+    let seperation = this.seperation(filteredBoids);
+    // let avoidence;
+    // if (this.awareness(planeArray)) {
+    this.awareness(planeArray);
+    // }
+    this.acc.add(alignment);
+    this.acc.add(cohesion);
+    this.acc.add(seperation);
+    if (this.collided) {
+      this.acc.add(this.avoidence(planeArray))
+    }
   }
 
-  if (perception_mask) {
-    range.show()
+  update() {
+    this.pos.add(this.vel);
+    this.vel.add(this.acc);
+    this.vel.limit(this.maxSpeed);
+    this.acc.mult(0);
   }
 
-  let filteredBoids = ot.query(range);
+  show() {
+    push();
+    translate(this.pos.x, this.pos.y, this.pos.z);
+    noStroke();
+    if (!this.leader) {
+      fill("#00AAFF");
+    } else {
+      fill(255, 0, 0);
+    }
+    sphere(5);
+    pop();
 
-  let alignment = this.align(filteredBoids);
-  let cohesion = this.cohesion(filteredBoids);
-  let seperation = this.seperation(filteredBoids);
-  // let avoidence;
-  // if (this.awareness(planeArray)) {
-  this.awareness(planeArray);
-  // }
-  this.acc.add(alignment);
-  this.acc.add(cohesion);
-  this.acc.add(seperation);
-  if (this.collided) {
-    this.avoidence(planeArray);
   }
-}
-
-update() {
-  this.pos.add(this.vel);
-  this.vel.add(this.acc);
-  this.vel.limit(this.maxSpeed);
-  this.acc.mult(0);
-}
-
-show() {
-  push();
-  translate(this.pos.x, this.pos.y, this.pos.z);
-  noStroke();
-  if (!this.leader) {
-    fill("#00AAFF");
-  } else {
-    fill(255, 0, 0);
-  }
-  sphere(5);
-  pop();
-
-}
 }
