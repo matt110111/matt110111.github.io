@@ -30,6 +30,7 @@ class Ray {
       let c = p5.Vector.add(this.p, v);
       return c;
     }
+    return
   }
 
   show(collided) {
@@ -39,7 +40,7 @@ class Ray {
     if (!collided) {
       fill(0, 255, 0);
     } else {
-      fill(255, 0, 0);
+      fill(255, 0, 255);
     }
     //translate(this.pos.x, this.pos.y, this.pos.z)
     translate(this.p.x, this.p.y, this.p.z)

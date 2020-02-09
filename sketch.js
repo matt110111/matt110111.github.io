@@ -3,7 +3,7 @@ let bW = 600;
 let bH = 600;
 let bD = 600;
 let Haltdebug = false;
-
+let PAUSE = false;
 
 
 let sub_division_view = false;
@@ -30,7 +30,7 @@ function setup() {
   show_player_perception.changed(perceptionViewCheck);
   h1 = createElement("P", "Number of boid updates p/s:");
   boidUpdates_ = createElement("H1", "Waiting..");
-  for (let i = 0;i<0;i++){
+  for (let i = 0; i < 0; i++) {
     boids.push(new Boid());
   }
   boids.push(new Boid(true));
@@ -38,11 +38,11 @@ function setup() {
 
   planeArray.push(new Plane(createVector(0, 0, 0), createVector(600, 0, 600), createVector(0, 0, 600), createVector(0, 0, 0), createVector(600, 0, 600)));
   planeArray.push(new Plane(createVector(600, 0, 600), createVector(600, 600, 600), createVector(600, 0, 0), createVector(600, 0, 0), createVector(600, 600, 600)));
-  planeArray.push(new Plane(createVector(600, 600, 0), createVector(0, 600, 600), createVector(600, 600, 600), createVector(600, 600, 0) ,createVector(0, 600, 600)));
+  planeArray.push(new Plane(createVector(600, 600, 0), createVector(0, 600, 600), createVector(600, 600, 600), createVector(600, 600, 0), createVector(0, 600, 600)));
   planeArray.push(new Plane(createVector(0, 600, 600), createVector(0, 0, 0), createVector(0, 600, 0), createVector(0, 600, 600), createVector(600, 0, 600)));
   planeArray.push(new Plane(createVector(600, 600, 600), createVector(0, 0, 600), createVector(600, 0, 600), createVector(0, 0, 600), createVector(600, 0, 600)));
   planeArray.push(new Plane(createVector(600, 0, 0), createVector(0, 600, 0), createVector(600, 600, 0), createVector(0, 600, 0), createVector(600, 0, 0)));
-  
+
 }
 
 function draw() {
@@ -51,8 +51,8 @@ function draw() {
   translate(bW - bW, bH - bH / 2, -bD * 1.5);
   rotateX(HALF_PI);
   rotateZ((PI / 4) + .02);
-  
-  
+
+
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
   boundary.show()
   ot = new Octree(boundary, 4, 0);
@@ -73,9 +73,11 @@ function draw() {
   }
   for (let i = 0; i < boids.length; i++) {
     boids[i].edges();
-    boids[i].update();
-    
+    if (!PAUSE) {
+      boids[i].update();
+    }
     boids[i].flock(boids, ot);
+
     boids[i].show();
   }
 }
@@ -101,7 +103,7 @@ function subdivisionCheck() {
 }
 
 function generatePointCloud() {
-  let viewDensity = 85
+  let viewDensity = 150;
   let Array = []
   let goldenRatio = (1 + sqrt(5)) / 2;
   let angleIncrement = PI * 2 * goldenRatio;
@@ -117,4 +119,11 @@ function generatePointCloud() {
     Array.push(nP)
   }
   return Array;
+}
+
+
+function keyTyped() {
+  if (key === 'p') {
+    PAUSE = !PAUSE;
+  }
 }

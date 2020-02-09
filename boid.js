@@ -1,9 +1,11 @@
 class Boid {
 
   constructor(leader = false) {
-    this.pos = createVector(random(width), random(height), random(height));
-    this.vel = createVector(-10, 0, -10);
-    this.vel.setMag(random(-4, 4));
+    //this.pos = createVector(random(width), random(height), random(height));
+    //this.vel = p5.Vector.random3D();
+    this.pos = createVector(20, 20, 20)
+    this.vel = createVector(1, 1, 1);
+    //this.vel.setMag(random(-4, 4));
 
     this.acc = createVector();
     this.maxForce = 0.2;
@@ -120,7 +122,7 @@ class Boid {
       //print(distance)
       if (!planeArray[0].bounds(ray.p) || distance < 4) {
         this.collided = true;
-        ray.show(true);
+        //ray.show(true);
 
       } else {
         this.collided = false;
@@ -132,51 +134,45 @@ class Boid {
 
 
   avoidence(planes) {
-
+    //INTERSECTION FUNCTION NEVER RETURNING FALSE
     let steering = createVector();
     let vectors = generatePointCloud();
     let drawn = false;
-    let lstOfVs = []
-    let idealLine = createVector()
-    for (let v of vectors) {
 
-      let ray = new Ray(this.pos, v, this.perception)
-      for (let p of planes) {
-        let intersect = ray.intersect(p);
-        // if it intersects its within the boundary and its outside of perception radius
-        if (intersect) {
-          let distance = p5.Vector.dist(ray.pos, intersect)
-          if (distance < this.perception && p.bounds(intersect)) {
-            lstOfVs.push(v)
-            // push()
-            // strokeWeight(2)
-            // stroke(255, 0, 0)
-            // line(this.pos.x, this.pos.y, this.pos.z, intersect.x, intersect.y, intersect.z)
-            // pop()
-          }
-        }
-      }
-    }
     for (let v of vectors) {
-      if (!lstOfVs.includes(v)) {
-        // push()
-        // strokeWeight(2)
-        // stroke(255, 0, 0)
-        // line(this.pos.x, this.pos.y, this.pos.z, this.pos.x + v.x * this.perception, this.pos.y + v.y * this.perception, this.pos.z + v.z * this.perception)
-        // pop()
-        steering.sub(v)
-      }
-      steering.normalize()
+      drawn = false
+      let ray = new Ray(this.pos, v, this.perception / 2)
       push()
-      strokeWeight(2)
-      stroke(0, 255, 0)
-      line(this.pos.x, this.pos.y, this.pos.z, this.pos.x + steering.x * this.perception, this.pos.y + steering.y * this.perception, this.pos.z + steering.z * this.perception)
-      pop()
-    }
-    steering.setMag(this.maxSpeed);
-    steering.add(this.vel);
-    steering.limit(this.maxForce*2);
-    return steering;
+        stroke(0, 255, 255)
+        strokeWeight(1)
+        line(ray.p.x,ray.p.y,ray.p.z, this.pos.x, this.pos.y, this.pos.z)
+        pop()
+      }
+    //   //for (let p of planes[0]) {
+    //   let p = planes[2]
+    //   let intersect = ray.intersect(p);
+    //   // if it intersects its within the boundary and its outside of perception radius
+    //   if (intersect) {
+    //     // let distance = p5.Vector.dist(ray.pos, intersect)
+    //     // if (distance < this.perception / 2 && p.bounds(intersect) && !drawn) {
+    //     //   drawn = true
+    //       push()
+    //       stroke(0, 255, 0)
+    //       strokeWeight(1)
+
+    //       line(intersect.x, intersect.y, intersect.z, this.pos.x, this.pos.y, this.pos.z)
+    //       pop()
+    //     // }
+    //   } else {
+    //     push()
+    //     stroke(0, 255, 255)
+    //     strokeWeight(1)
+    //     line(ray.p.x,ray.p.y,ray.p.z, this.pos.x, this.pos.y, this.pos.z)
+    //     pop()
+    //   }
+    //   //}
+    // }
+
   }
 
 
