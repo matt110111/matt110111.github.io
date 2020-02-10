@@ -198,8 +198,8 @@ class Boid {
     this.awareness(planeArray);
     // }
     this.acc.add(alignment);
-    //this.acc.add(cohesion);
-    //this.acc.add(seperation);
+    this.acc.add(cohesion);
+    this.acc.add(seperation);
     if (this.collided) {
       this.acc.add(this.avoidence(planeArray))
     }
