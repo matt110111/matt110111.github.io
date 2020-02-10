@@ -14,7 +14,7 @@ class Ray {
   intersect(Plane, pos = true) {
     let d = p5.Vector.dot(Plane.normal, Plane.b);
     if (pos) {
-      if (p5.Vector.dot(Plane.normal, this.dir) == 0) {
+      if (p5.Vector.dot(Plane.normal, this.dir) <= 0) {
         return false;
       }
       let x = (d - p5.Vector.dot(Plane.normal, this.pos)) / p5.Vector.dot(Plane.normal, this.dir);

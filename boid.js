@@ -1,11 +1,11 @@
 class Boid {
 
   constructor(leader = false) {
-    //this.pos = createVector(random(width), random(height), random(height));
-    //this.vel = p5.Vector.random3D();
-    this.pos = createVector(20, 20, 20)
-    this.vel = createVector(1, 1, 1);
-    //this.vel.setMag(random(-4, 4));
+    this.pos = createVector(random(width), random(height), random(height));
+    this.vel = p5.Vector.random3D();
+    // this.pos = createVector(300, 300, 300)
+    // this.vel = createVector(10, 0, 0);
+    this.vel.setMag(random(-4, 4));
 
     this.acc = createVector();
     this.maxForce = 0.2;
@@ -106,7 +106,7 @@ class Boid {
       steering.div(total);
       steering.setMag(this.maxSpeed);
       steering.sub(this.vel);
-      steering.limit(this.maxForce);
+      steering.limit(this.maxForce*1.1);
     }
     return steering;
 
@@ -138,41 +138,38 @@ class Boid {
     let steering = createVector();
     let vectors = generatePointCloud();
     let drawn = false;
-
+    let count = 0;
     for (let v of vectors) {
       drawn = false
-      let ray = new Ray(this.pos, v, this.perception / 2)
-      push()
-        stroke(0, 255, 255)
-        strokeWeight(1)
-        line(ray.p.x,ray.p.y,ray.p.z, this.pos.x, this.pos.y, this.pos.z)
-        pop()
+      let ray = new Ray(this.pos, v)
+      for (let p of planes) {
+
+        let intersect = ray.intersect(p, true);
+        // if it intersects its within the boundary and its outside of perception radius
+        if (intersect) {
+          let distance = p5.Vector.dist(ray.pos, intersect)
+          if (distance < this.perception / 2 && p.bounds(intersect) && !drawn) {
+            drawn = true
+            // push()
+            // stroke(0, 255, 0)
+            // strokeWeight(1)
+            // line(intersect.x, intersect.y, intersect.z, this.pos.x, this.pos.y, this.pos.z)
+            // pop()
+          }
+        } else if (!drawn && p.bounds(ray.p)) {
+          steering.add(v);
+          count++;
+          //ray.show(true)
+        }
       }
-    //   //for (let p of planes[0]) {
-    //   let p = planes[2]
-    //   let intersect = ray.intersect(p);
-    //   // if it intersects its within the boundary and its outside of perception radius
-    //   if (intersect) {
-    //     // let distance = p5.Vector.dist(ray.pos, intersect)
-    //     // if (distance < this.perception / 2 && p.bounds(intersect) && !drawn) {
-    //     //   drawn = true
-    //       push()
-    //       stroke(0, 255, 0)
-    //       strokeWeight(1)
-
-    //       line(intersect.x, intersect.y, intersect.z, this.pos.x, this.pos.y, this.pos.z)
-    //       pop()
-    //     // }
-    //   } else {
-    //     push()
-    //     stroke(0, 255, 255)
-    //     strokeWeight(1)
-    //     line(ray.p.x,ray.p.y,ray.p.z, this.pos.x, this.pos.y, this.pos.z)
-    //     pop()
-    //   }
-    //   //}
-    // }
-
+    }
+    if (count > 0) {
+      steering.div(count);
+      steering.setMag(this.maxSpeed*2);
+      //steering.sub(this.vel);
+      steering.limit(this.maxForce*1.25);
+      return steering
+    }
   }
 
 
