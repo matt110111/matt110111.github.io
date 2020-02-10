@@ -30,7 +30,7 @@ function setup() {
   show_player_perception.changed(perceptionViewCheck);
   h1 = createElement("P", "Number of boid updates p/s:");
   boidUpdates_ = createElement("H1", "Waiting..");
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 500; i++) {
     boids.push(new Boid());
   }
   boids.push(new Boid(true));
@@ -55,7 +55,7 @@ function draw() {
 
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
   boundary.show()
-  ot = new Octree(boundary, 4, 0);
+  ot = new Octree(boundary, 16, 0);
 
   fpsElement.html(int(frameRate()));
   boidUpdates_.html(round(boidUpdates / 1000) + "k");
@@ -103,7 +103,7 @@ function subdivisionCheck() {
 }
 
 function generatePointCloud() {
-  let viewDensity = 50;
+  let viewDensity = 31;
   let Array = []
   let goldenRatio = (1 + sqrt(5)) / 2;
   let angleIncrement = PI * 2 * goldenRatio;
