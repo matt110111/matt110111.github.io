@@ -29,7 +29,7 @@ class Ray {
         value: c
       }
     } else {
-      if (p5.Vector.dot(Plane.normal, this.dir) == 0) {
+      if (p5.Vector.dot(Plane.normal, this.dir) <= 0) {
         return {
           bool: false,
           value: p5.Vector.dot(Plane.normal, this.dir)
