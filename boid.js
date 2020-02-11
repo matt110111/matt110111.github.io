@@ -1,6 +1,6 @@
 class Boid {
 
-  constructor(leader = false) {
+  constructor() {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
     // this.pos = createVector(300, 300, 300)
@@ -12,7 +12,7 @@ class Boid {
     this.maxSpeed = 4;
     this.perception = 100;
     this.radius = 5
-    this.leader = leader;
+    this.leader = false;
     this.pointCloud = generatePointCloud();
     this.collided = false;
   }
@@ -105,14 +105,24 @@ class Boid {
       steering.div(total);
       steering.setMag(this.maxSpeed);
       steering.sub(this.vel);
-      steering.limit(this.maxForce * 1.1);
+      
+      steering.limit(this.maxForce*1.15);
     }
     return steering;
 
   }
+
+
+collection(){
+
+
+
+}
+
+
   awareness(planes) {
-    let distance = 4;
-    let ray = new Ray(this.pos, this.vel, this.perception);
+    let ray = new Ray(this.pos, this.vel);
+   // ray.show()
     for (let p of planes) {
       let intersect = ray.intersect(p,false);
       if (!p.bounds(ray.p)) {
@@ -131,11 +141,13 @@ class Boid {
     let vectors = this.pointCloud;
     let evaluated = false;
     let count = 0;
+    let list_of_vs = [];
     for (let v of vectors) {
       evaluated = false
       let ray = new Ray(this.pos, v)
+      boidUpdates++;
       for (let p of planes) {
-
+        boidUpdates++;
         let intersect = ray.intersect(p);
 
         if (intersect.bool) {
@@ -144,6 +156,8 @@ class Boid {
             evaluated = true
           }
         } else if (!evaluated && p.bounds(ray.p)) {
+          evaluated = true
+          //ray.show()
           steering.add(v);
           count++;
         }
@@ -153,12 +167,13 @@ class Boid {
     if (count > 0) {
       steering.div(count);
       steering.setMag(this.maxSpeed);
+      
       steering.limit(this.maxForce * 1.25);
-      push();
-      stroke(255,0,255);
-      strokeWeight(2.5);
-      line(this.pos.x,this.pos.y,this.pos.z,this.pos.x+steering.x*this.perception,this.pos.y+steering.y*this.perception,this.pos.z+steering.z*this.perception)
-      pop();
+      // push();
+      // stroke(255,0,255);
+      // strokeWeight(2.5);
+      // line(this.pos.x,this.pos.y,this.pos.z,this.pos.x+steering.x*this.perception*2,this.pos.y+steering.y*this.perception*2,this.pos.z+steering.z*this.perception*2)
+      // pop();
       return steering
     }
   }
