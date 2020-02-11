@@ -114,7 +114,7 @@ class Boid {
     let distance = 4;
     let ray = new Ray(this.pos, this.vel, this.perception);
     for (let p of planes) {
-      let intersect = ray.intersect(p);
+      let intersect = ray.intersect(p,false);
       if (intersect.bool)
         distance = p5.Vector.dist(ray.p, intersect.value)
       if (!p.bounds(ray.p) || distance < 2) {
