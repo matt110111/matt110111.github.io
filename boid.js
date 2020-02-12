@@ -4,9 +4,9 @@ class Boid {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
     // this.pos = createVector(300, 300, 300)
-    // this.vel = createVector(10, 0, 0);
+    this.vel = createVector(10, 0, 0);
     this.vel.setMag(random(-4, 4));
-
+    this.grouped = false;
     this.acc = createVector();
     this.maxForce = 0.2;
     this.maxSpeed = 4;
@@ -72,7 +72,6 @@ class Boid {
       if (other != this && d < this.perception) {
         steering.add(other.pos);
         total++;
-
       }
     }
     if (total > 0) {
@@ -105,26 +104,62 @@ class Boid {
       steering.div(total);
       steering.setMag(this.maxSpeed);
       steering.sub(this.vel);
-      
-      steering.limit(this.maxForce*1.15);
+
+      steering.limit(this.maxForce * 1.15);
     }
     return steering;
 
   }
 
 
-collection(){
+  collection(boids) {
+    let commonDirection = createVector();
+    let commonPosition = createVector();
+    let total = 0;
 
-
-
-}
+    for (let b of boids) {
+      let bU = b.userData
+      commonDirection.add(bU.vel);
+      commonPosition.add(bU.pos);
+      total++;
+    }
+    let point = createVector();
+    let furthestP = {value: 0,boid: 0};
+    for (let b of boids) {
+      b.userData.leader = false
+      let u = p5.Vector.sub(b.userData.pos.copy(), commonPosition).normalize();
+      //console.log(vector)
+      let magsq_cD = commonDirection.magSq()
+      let UdotV = u.dot(commonDirection);
+      let scalar = abs(magsq_cD / UdotV)
+      if (0 < scalar && scalar < 1000) {
+        furthestP.value = scalar;
+        furthestP.boid = b;
+      }
+    }
+    if (furthestP.value){furthestP.boid.userData.leader=true}
+    // console.log(furthestP)
+    if (total > 1) {
+      //commonDirection.div(total);
+      commonPosition.div(total);
+      
+      // push();
+      // translate(commonPosition.x, commonPosition.y, commonPosition.z);
+      // // fill(255, 255, 25);
+      // stroke(255, 20, 20);
+      // strokeWeight(2)
+      // line(0, 0, 0, commonDirection.x, commonDirection.y, commonDirection.z);
+      // //sphere(3);
+      // pop();
+    }
+  }
 
 
   awareness(planes) {
     let ray = new Ray(this.pos, this.vel);
-   // ray.show()
+
     for (let p of planes) {
-      let intersect = ray.intersect(p,false);
+      let intersect = ray.intersect(p, false);
       if (!p.bounds(ray.p)) {
         this.collided = true;
       } else {
@@ -140,7 +175,7 @@ collection(){
     let steering = createVector();
     let vectors = this.pointCloud;
     let evaluated = false;
-    let count = 0;
+    let total = 0;
     let list_of_vs = [];
     for (let v of vectors) {
       evaluated = false
@@ -159,21 +194,15 @@ collection(){
           evaluated = true
           //ray.show()
           steering.add(v);
-          count++;
+          total++;
         }
       }
     }
     //Divide the sum of vectors that resulted in no intersection by the number of occurences
-    if (count > 0) {
-      steering.div(count);
+    if (total > 0) {
+      steering.div(total);
       steering.setMag(this.maxSpeed);
-      
       steering.limit(this.maxForce * 1.25);
-      // push();
-      // stroke(255,0,255);
-      // strokeWeight(2.5);
-      // line(this.pos.x,this.pos.y,this.pos.z,this.pos.x+steering.x*this.perception*2,this.pos.y+steering.y*this.perception*2,this.pos.z+steering.z*this.perception*2)
-      // pop();
       return steering
     }
   }
@@ -190,22 +219,23 @@ collection(){
       range = new Sphere(this.pos.x, this.pos.y, this.pos.z, this.perception);
     }
 
-    
+
 
     let filteredBoids = ot.query(range);
-    
-    if (perception_mask) {
-      if (filteredBoids.length > 1){
-      range.show(true)
-      }
-      else{
 
-      range.show(false)
+    if (perception_mask) {
+      if (filteredBoids.length > 1) {
+        this.grouped = true;
+        range.show(true);
+      } else {
+        this.grouped = false;
+        range.show(false);
       }
     }
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
+    let collection = this.collection(filteredBoids);
     // let avoidence;
     // if (this.awareness(planeArray)) {
     this.awareness(planeArray);
@@ -214,6 +244,7 @@ collection(){
     this.acc.add(cohesion);
     this.acc.add(seperation);
     if (this.collided) {
+      if(!this.grouped || this.leader)
       this.acc.add(this.avoidence(planeArray))
     }
   }
@@ -234,7 +265,7 @@ collection(){
     } else {
       fill(255, 0, 0);
     }
-    sphere(5);
+    sphere(2);
     pop();
 
   }
