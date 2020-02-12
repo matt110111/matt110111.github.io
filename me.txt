@@ -1,0 +1,199 @@
+Name	Type	Description	
+Disaster Recovery	Organizational Unit		
+Test	Organizational Unit		
+Vendor-Contractors	Organizational Unit		
+Ahlijanian, David (DOA)	User		
+Alfred.Caldarone	User		
+andrade, Kevin	User	02/18/2019-09/18/2019	
+Antos, Winifred	User		
+Aponte, Barbara	User	Techinical Support Specialist	
+Aubin, Michael	User		
+AutoMation, DoIT	User	Microsoft Flow Intergration Account	
+AzureTestUser, This	User		
+Balajapally, Prashanth	User	Vendor	
+Barnett, Nicole	User		
+Baskin, Gary (DOA)	User		
+Bedard, Elise	User		
+Biddle, David	User		
+Booth, Matthew	User		
+Bowman, Jim	User		
+Cabral, Christine	User		
+Cardanha, Evan	User		
+Cavanaugh, Diane (DOA)	User		
+Chugh, Salina	User		
+Church, Ray	User		
+Collard, Maureen	User		
+Cook, Scott	User		
+Cosgrove, Daniel	User	Assistant Supervisor Computer Operations	
+Costa, Derek	User	Do Not Touch per Security until 3/2/20.	
+Costakos, Joyce	User		
+Cote, Brian	User		
+Cotter, Sherrylynn	User		
+Cruz, Yesenia	User		
+Dail, Rob (DOA)	User		
+Dalton, Karen	User		
+DaSilva, Antonio	User		
+Dell, BHDDH	User	Windows 10 Migration Account	
+Dell, DCYF	User	Windows 10 Migration Account	
+Dell, DEM	User	Windows 10 Migration Account	
+Dell, DHS	User	Windows 10 Migration Account	
+Dell, DOA	User	Windows 10 Migration Account	
+DelleFave, Karen	User		
+DelPrete, Bill	User		
+DeQuattro, Thomas	User		
+Dias, Alan	User		
+DIorio, Karen	User		
+DOA.Training	User		
+DocumentSync, DOA	User	Project Documentation Sync Account	
+DoIT, Test	User		
+DOITMASSEMAIL	User	DOIT Mass Mailing User	
+DoitTimesheets, DOA	User		
+Douglas, Paul	User		
+Dove, John	User	Vendor Engineering	
+Drouin, Jacqueline	User		
+ENTTRAP, DOA	User	Proofpoint TRAP mailbox for Quarantine - DO NOT TOUCH!	
+Ereli, Michael	User	Consultant	
+Etessami, Farhad	User	Start Date: 10/28/19 - 03/31/2020	
+Farnsworth, Deborah	User	DOA/DoIT	
+Fernandez, Ramon	User		
+Furtado, Sandy	User		
+Gallien, Patrick	User		
+Gallo, David	User		
+Ganesan, Subramanian	User	vendor	
+Genest, Robert	User		
+Gervasio, Jose	User		
+Gonzalez, Frank	User	Techinical Support Specialist	
+Gorton, Tanya	User		
+Gravier, Nicolle	User		
+Guarino, James	User		
+Harden, Alfred	User		
+Harden, John	User		
+Harkin, Dan	User		
+Harris, Mindy	User		
+Haydt, Theresa	User		
+Higgins, Donald	User		
+Ippalapalli, Hari	User	Contractor	
+ITOC, DOIT	User	ITOC monitor pc	
+Joharjian, Linda	User		
+Johnson, Matthew	User		
+Keefe, Allen	User		
+Kent, Mark	User		
+Klaus.Oneal	User		
+Kluk, Paul	User		
+km, venkatesh	User	vendor	
+Kumar, Avinash	User		
+Kumar, Bijay	User		
+Labelle, Ray	User		
+Lang, Matthew	User		
+LaPlume, Robin	User		
+Lauro, Gina	User		
+Laursen, Jack (DOA)	User		
+LDAPQuery, Test	User		
+LeCampion, Alain	User		
+Lee, Dmitriy	User		
+LeFrancois, Gary	User		
+Licenses, DOA	User	SOFTWARE LICENSE	
+Lombardi, Michael	User		
+Lupinacci, Tony	User	Enterprise Architect	
+Madhavan, Ramesh	User		
+Mahoney, Brendan	User		
+MailAdmin, DOA	User	Mass Mailing User	
+Maldonado, Miguel	User	NetCenergy	
+Mannix, Lisa	User		
+Marcotte, Rene	User	Start Date: 10/28/19 - 06/30/2020	
+Marinello, Joseph	User	Cherwell Login Only	
+Martin, Logan	User		
+Martin, Robert	User		
+Mazzenga, Pam	User		
+McCarthy, Tim	User		
+McCaughey, Daniel	User		
+McFadden, Dave	User		
+Mcgrath, Robin	User	Working w/Telecom	
+McKenna, Lauren	User	Interdepartmental Project Manager	
+Mendez, Hector (DOA)	User		
+Mendoza, Cesar	User		
+Meneses, Carlos	User	Edgesys - Contractor - SharePoint Project Manager	
+Merrill, Deb	User		
+Mollohan, Brian	User		
+Moore, Lynda	User		
+Mosesian, Grant	User		
+Murphy, Paul	User		
+Navarrete, Fernando (DOA)	User		
+NCSCInfo, DOA	User		
+Neary, Meghan	User		
+Nigrelli, James	User		
+Odonnell, Donald	User		
+ODonnell, Kathy	User		
+ODonnell, Patrick	User		
+Odonnell, Thomas	User		
+Oliver, Roxanne	User		
+Osediacz, Edward	User	Techinical Support Specialist II	
+Osser, Yiping	User	Consultant	
+otheruser, this	User	DCYF test user	
+Palazzo, Stephen	User		
+Pate, Frank	User		
+Patel, Chirag	User		
+Pearson, William	User		
+Pelletier, Robert	User		
+Pena, Andrew	User		
+Pena, Andy	User		
+Peterson, Donna	User	Consultant	
+Petrarca, Domenic	User		
+Phillips, Hallam	User	Dell Contractor	
+Phommakoth, Kiane	User		
+Pike, Michelle	User		
+PRC, DOIT	User		
+Puravangara, Anand	User		
+Ramirez, Moises	User		
+Read, Robert	User		
+Rego, Todd	User		
+Reidl, Andrew	User		
+Reply, No	User		
+Rimal, Dikshyanta	User		
+Rita, Venus	User		
+Ritter, Jim	User		
+Rogers, Kyle	User		
+Rose, Dawn	User	10/18/2018 End date: 06/30/2020	
+Russo, Michael	User	Technical Support Specialist III	
+Ryan, Matthew	User		
+Sabada, Krishna	User	IT Program Contractor	
+Sachdeva, Mukul	User	Vendor Engineering	
+Saunders, Stephen	User		
+Sciacca, Elvio	User		
+Service Desk (Test), Enterprise	User		
+Service Desk, Enterprise	User		
+Sickoll, Jay	User		
+Silva, Phil	User		
+Spencer, Sondra	User		
+Sriramoju, Vijay	User	Contractor	
+Stanley, Kirk	User		
+stateofridoit	User	SoRI - DoIT Google for Work Account	
+Steve.Beauchemin	User		
+Stine, Alex	User		
+Tardiff, Brian	User	Chief Information Security Officer	
+Tavares, Alyson	User	Ticket 592183 Intern exp 12/31/2019	
+TechSchedule, DOA	User		
+Test.Microsoft	User		
+Thurber, Paul	User		
+Tingle, Steven	User		
+Tomas, Victor	User		
+Tracy, Eric	User		
+Tracy, Keith	User		
+Tyler, Beth	User		
+Umarmokthiyar, Shaikh	User	vendor	
+Valerie.Bager	User		
+VanDijk, Christiaan	User		
+Vann, Samantha	User		
+Vitthal Gawande, Devanand	User	vendor	
+Vittoria, Barbara	User		
+vmware.test	User		
+Westphal, Jessica	User		
+White, Frank	User		
+Whitford, Jacob	User		
+Whittier, Scott	User	Working w/ Frank Pate	
+Wilcox, Dylan	User		
+Williams, Mark	User		
+Wilson, Nathaniel	User		
+Wright, Justin	User	DoIT	
+Xifaras, Peter	User		
+Zarski, Edward	User		
