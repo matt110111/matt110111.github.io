@@ -3,7 +3,7 @@ class Boid {
   constructor() {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
-    // this.pos = createVector(300, 300, 300)
+
     this.vel = createVector(10, 0, 0);
     this.vel.setMag(random(-4, 4));
     this.grouped = false;
@@ -124,11 +124,14 @@ class Boid {
       total++;
     }
     let point = createVector();
-    let furthestP = {value: 0,boid: 0};
+    let furthestP = {
+      value: 0,
+      boid: 0
+    };
     for (let b of boids) {
       b.userData.leader = false
       let u = p5.Vector.sub(b.userData.pos.copy(), commonPosition).normalize();
-      //console.log(vector)
+
       let magsq_cD = commonDirection.magSq()
       let UdotV = u.dot(commonDirection);
       let scalar = abs(magsq_cD / UdotV)
@@ -137,20 +140,14 @@ class Boid {
         furthestP.boid = b;
       }
     }
-    if (furthestP.value){furthestP.boid.userData.leader=true}
+    if (furthestP.value) {
+      furthestP.boid.userData.leader = true
+    }
     // console.log(furthestP)
     if (total > 1) {
       //commonDirection.div(total);
       commonPosition.div(total);
-      
-      // push();
-      // translate(commonPosition.x, commonPosition.y, commonPosition.z);
-      // // fill(255, 255, 25);
-      // stroke(255, 20, 20);
-      // strokeWeight(2)
-      // line(0, 0, 0, commonDirection.x, commonDirection.y, commonDirection.z);
-      // //sphere(3);
-      // pop();
+
     }
   }
 
@@ -162,6 +159,7 @@ class Boid {
       let intersect = ray.intersect(p, false);
       if (!p.bounds(ray.p)) {
         this.collided = true;
+        ray.show()
       } else {
         this.collided = false;
       }
@@ -169,12 +167,12 @@ class Boid {
   }
 
 
-
+//Avoidence create internal variable denoting that a boid is heading for collision pick a random direction thats free.
 
   avoidence(planes) {
     let steering = createVector();
     let vectors = this.pointCloud;
-    let evaluated = false;
+    let evaluated = false; // Evaluated 
     let total = 0;
     let list_of_vs = [];
     for (let v of vectors) {
@@ -222,30 +220,31 @@ class Boid {
 
 
     let filteredBoids = ot.query(range);
-
-    if (perception_mask) {
-      if (filteredBoids.length > 1) {
-        this.grouped = true;
-        range.show(true);
-      } else {
-        this.grouped = false;
-        range.show(false);
-      }
+    if (filteredBoids.length > 1) {
+      //print(this.grouped)
+      this.grouped = true;
+     
+    } else {
+      this.grouped = false;
     }
+
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
     let collection = this.collection(filteredBoids);
     // let avoidence;
-    // if (this.awareness(planeArray)) {
-    this.awareness(planeArray);
+    // if (this.athis.awareness(planeArray);wareness(planeArray)) {
+    
     // }
+    if (this.leader || !this.grouped){
+    this.awareness(planeArray)
+    }
     this.acc.add(alignment);
     this.acc.add(cohesion);
     this.acc.add(seperation);
     if (this.collided) {
-      if(!this.grouped || this.leader)
-      this.acc.add(this.avoidence(planeArray))
+      if (!this.grouped || this.leader)
+        this.acc.add(this.avoidence(planeArray))
     }
   }
 
@@ -265,7 +264,7 @@ class Boid {
     } else {
       fill(255, 0, 0);
     }
-    sphere(2);
+    sphere(3);
     pop();
 
   }

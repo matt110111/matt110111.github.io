@@ -30,7 +30,7 @@ function setup() {
   show_player_perception.changed(perceptionViewCheck);
   h1 = createElement("P", "Number of boid updates p/s:");
   boidUpdates_ = createElement("H1", "Waiting..");
-  for (let i = 0; i < 250; i++) {
+  for (let i = 0; i < 50; i++) {
     boids.push(new Boid());
   }
   //boids.push(new Boid(true));
@@ -72,7 +72,7 @@ function draw() {
     drawSub(ot, sub_division_depth)
   }
   for (let i = 0; i < boids.length; i++) {
-    boids[i].edges();
+    //boids[i].edges();
     if (!PAUSE) {
       boids[i].update();
     }
