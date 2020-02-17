@@ -14,7 +14,8 @@ class Boid {
     this.radius = 5
     this.leader = false;
     this.pointCloud = generatePointCloud();
-    this.collided = false;
+    this.heading_for_collision = false;
+    this.escape_trajectory = undefined
   }
   edges() {
     if (this.pos.x > bW) {
@@ -158,10 +159,10 @@ class Boid {
     for (let p of planes) {
       let intersect = ray.intersect(p, false);
       if (!p.bounds(ray.p)) {
-        this.collided = true;
+        this.heading_for_collision = true;
         ray.show()
       } else {
-        this.collided = false;
+        this.heading_for_collision = false;
       }
     }
   }
@@ -200,7 +201,7 @@ class Boid {
     if (total > 0) {
       steering.div(total);
       steering.setMag(this.maxSpeed);
-      steering.limit(this.maxForce * 1.25);
+      steering.limit(this.maxForce);
       return steering
     }
   }
@@ -239,10 +240,10 @@ class Boid {
     if (this.leader || !this.grouped){
     this.awareness(planeArray)
     }
-    this.acc.add(alignment);
-    this.acc.add(cohesion);
-    this.acc.add(seperation);
-    if (this.collided) {
+    //this.acc.add(alignment);
+    //this.acc.add(cohesion);
+    //this.acc.add(seperation);
+    if (this.heading_for_collision) {
       if (!this.grouped || this.leader)
         this.acc.add(this.avoidence(planeArray))
     }
