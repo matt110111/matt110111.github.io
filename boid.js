@@ -154,13 +154,14 @@ class Boid {
 
 
   awareness(planes) {
-    let ray = new Ray(this.pos, this.vel);
+    let ray = new Ray(this.pos, this.vel, this.perception);
 
     for (let p of planes) {
       let intersect = ray.intersect(p, false);
       if (!p.bounds(ray.p)) {
         this.heading_for_collision = true;
-        ray.show()
+       // ray.show()
+        
       } else {
         this.heading_for_collision = false;
       }
@@ -169,6 +170,14 @@ class Boid {
 
 
 //Avoidence create internal variable denoting that a boid is heading for collision pick a random direction thats free.
+/*
+avoidence should find a vector based on the dot product of the plane intersection and the normal
+--Plane 
+--Dot of Plane selected && ray direction
+
+--Coner and edge of plane detection.
+*/
+
 
   avoidence(planes) {
     let steering = createVector();
@@ -183,23 +192,32 @@ class Boid {
       for (let p of planes) {
         boidUpdates++;
         let intersect = ray.intersect(p);
-
+        let Dot = p5.Vector.dot(p.normal,ray.dir)
         if (intersect.bool) {
           let distance = p5.Vector.dist(ray.pos, intersect.value)
-          if (distance < this.perception / 2 && p.bounds(intersect.value) && !evaluated) {
+          if (distance < this.perception && p.bounds(intersect.value) && !evaluated) {
             evaluated = true
           }
-        } else if (!evaluated && p.bounds(ray.p)) {
+        } else if (!evaluated && p.bounds(ray.p) && (Dot < 0.9 && Dot > 0.4 || Dot < -0.4 && Dot > -0.9) ) {
           evaluated = true
           //ray.show()
           steering.add(v);
           total++;
+        }
+        if(!p.bounds(this.pos)){
+          let dir = p5.Vector.sub(createVector(300,300,300),this.pos)
+          dir.normalize()
+          steering.add(dir)
+          steering.setMag(this.maxSpeed);
+          steering.limit(this.maxForce);
+          return steering
         }
       }
     }
     //Divide the sum of vectors that resulted in no intersection by the number of occurences
     if (total > 0) {
       steering.div(total);
+      //steering.sub(this.vel)
       steering.setMag(this.maxSpeed);
       steering.limit(this.maxForce);
       return steering
@@ -240,9 +258,9 @@ class Boid {
     if (this.leader || !this.grouped){
     this.awareness(planeArray)
     }
-    //this.acc.add(alignment);
-    //this.acc.add(cohesion);
-    //this.acc.add(seperation);
+    this.acc.add(alignment);
+    this.acc.add(cohesion);
+    this.acc.add(seperation);
     if (this.heading_for_collision) {
       if (!this.grouped || this.leader)
         this.acc.add(this.avoidence(planeArray))
@@ -252,6 +270,7 @@ class Boid {
   update() {
     this.pos.add(this.vel);
     this.vel.add(this.acc);
+
     this.vel.limit(this.maxSpeed);
     this.acc.mult(0);
   }
