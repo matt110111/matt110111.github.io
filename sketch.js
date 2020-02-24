@@ -30,7 +30,7 @@ function setup() {
   show_player_perception.changed(perceptionViewCheck);
   h1 = createElement("P", "Number of boid updates p/s:");
   boidUpdates_ = createElement("H1", "Waiting..");
-  for (let i = 0; i < 250; i++) {
+  for (let i = 0; i < 100; i++) {
     boids.push(new Boid());
   }
   //boids.push(new Boid(true));
@@ -102,7 +102,7 @@ function subdivisionCheck() {
 }
 
 function generatePointCloud() {
-  let viewDensity = 21;
+  let viewDensity = 100;
   let Array = []
   let goldenRatio = (1 + sqrt(5)) / 2;
   let angleIncrement = PI * 2 * goldenRatio;
