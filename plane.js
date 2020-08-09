@@ -1,3 +1,5 @@
+
+
 class Plane {
   constructor(vector1, vector2, vector3, minV, maxV) {
     this.a = vector1;

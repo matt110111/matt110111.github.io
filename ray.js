@@ -3,9 +3,11 @@
 class Ray {
   constructor(v, d, length) {
     this.pos = v;
-    this.dir = d;
+    this.dire = d;
     this.length = length || 50;  //default 50px
     //Below code. Refactor, included this for otimizing the collision system to use one Ray when the boid is in flight 
+    this.dir = this.dire.copy()
+    this.dir = this.dir.normalize()
     this.p = createVector(this.pos.x + this.dir.x * this.length, this.pos.y + this.dir.y * this.length, this.pos.z + this.dir.z * this.length)
     // Refactor
 
@@ -54,7 +56,10 @@ class Ray {
     } else {
       fill(255, 0, 255);
     }
-    //translate(this.pos.x, this.pos.y, this.pos.z)
+    // strokeWeight(2.5)
+    // stroke(0,255,0)
+    // line(this.pos.x,this.pos.y,this.pos.z,this.p.x,this.p.y,this.p.z)
+    // translate(this.pos.x, this.pos.y, this.pos.z)
     translate(this.p.x, this.p.y, this.p.z)
     sphere(2)
     pop();

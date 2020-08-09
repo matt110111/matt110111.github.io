@@ -1,7 +1,7 @@
 let boids = [];
-let bW = 600;
-let bH = 600;
-let bD = 600;
+let bW = 800;
+let bH = 800;
+let bD = 800;
 let Haltdebug = false;
 let PAUSE = false;
 
@@ -9,7 +9,7 @@ let PAUSE = false;
 let sub_division_view = false;
 let perception_mask = false;
 let boid_range_shape = 'Sphere';
-let boidUpdates = 0;
+// let boidUpdates = 0;
 let planeArray = [];
 
 function setup() {
@@ -29,8 +29,8 @@ function setup() {
   show_player_perception = createCheckbox("Show boids perception", false).parent('controlposition');
   show_player_perception.changed(perceptionViewCheck);
   h1 = createElement("P", "Number of boid updates p/s:");
-  boidUpdates_ = createElement("H1", "Waiting..");
-  for (let i = 0; i < 250; i++) {
+  // boidUpdates_ = createElement("H1", "Waiting..");
+  for (let i = 0; i < 1; i++) {
     boids.push(new Boid());
   }
   //boids.push(new Boid(true));
@@ -48,9 +48,9 @@ function setup() {
 function draw() {
   background("#282828");
   orbitControl();
-  translate(bW - bW, bH - bH / 2, -bD * 1.5);
+  translate(bW - bW*1.5, bH - bH / 1.8, -bD * 0.5);
   rotateX(HALF_PI);
-  rotateZ((PI / 4) + .02);
+  //rotateZ((PI / 4) + .02);
 
 
   boundary = new Box(bW / 2, bH / 2, bD / 2, bW / 2, bH / 2, bD / 2, true)
@@ -58,8 +58,8 @@ function draw() {
   ot = new Octree(boundary, 32, 0);
 
   fpsElement.html(int(frameRate()));
-  boidUpdates_.html(boidUpdates)
-  boidUpdates = 0;
+  //boidUpdates_.html(boidUpdates)
+  //boidUpdates = 0;
 
   let sub_division_depth = sub_division_depth_.value();
 
@@ -101,14 +101,32 @@ function subdivisionCheck() {
   }
 }
 
+// function generatePointCloud() {
+//   let viewDensity = 21;
+//   let Array = []
+//   let goldenRatio = (1 + sqrt(5)) / 2;
+//   let angleIncrement = PI * 2 * goldenRatio;
+//   for (let i = 0; i < viewDensity; i++) {
+//     let t = i / viewDensity;
+//     let inclination = acos(1 - 2 * t);
+//     let azimuth = angleIncrement * i;
+//     let x = sin(inclination) * cos(azimuth);
+//     let y = sin(inclination) * sin(azimuth);
+//     let z = cos(inclination);
+//     let nP = createVector(x, y, z);
+//     nP.normalize();
+//     Array.push(nP)
+//   }
+//   return Array;
+// }
+
 function generatePointCloud() {
-  let viewDensity = 21;
   let Array = []
   let goldenRatio = (1 + sqrt(5)) / 2;
   let angleIncrement = PI * 2 * goldenRatio;
-  for (let i = 0; i < viewDensity; i++) {
-    let t = i / viewDensity;
-    let inclination = acos(1 - 2 * t);
+  for (let i = 0; i < 70; i++) {
+    let t = i /2;
+    let inclination = acos(1 - 2 * (t / 20));
     let azimuth = angleIncrement * i;
     let x = sin(inclination) * cos(azimuth);
     let y = sin(inclination) * sin(azimuth);
@@ -116,6 +134,7 @@ function generatePointCloud() {
     let nP = createVector(x, y, z);
     nP.normalize();
     Array.push(nP)
+
   }
   return Array;
 }

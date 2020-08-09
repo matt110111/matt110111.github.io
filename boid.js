@@ -10,41 +10,20 @@ class Boid {
     this.acc = createVector();
     this.maxForce = 0.2;
     this.maxSpeed = 4;
-    this.perception = 100;
+    this.perception = 50;
     this.radius = 5
     this.leader = false;
     this.pointCloud = generatePointCloud();
     this.heading_for_collision = false;
     this.escape_trajectory = undefined
   }
-  edges() {
-    if (this.pos.x > bW) {
-      this.pos.x = 0;
-    }
-    if (this.pos.y > bH) {
-      this.pos.y = 0;
-    }
-    if (this.pos.x < 0) {
-      this.pos.x = bW;
-    }
-    if (this.pos.y < 0) {
-      this.pos.y = bH;
-    }
-    if (this.pos.z < 0) {
-      this.pos.z = bW;
-    }
-    if (this.pos.z > bW) {
-      this.pos.z = 0;
-    }
 
-  }
 
   align(boids) {
 
     let steering = createVector();
     let total = 0;
     for (let b of boids) {
-      boidUpdates++;
       let other = b.userData;
       let d = other.pos.dist(this.pos)
       if (other != this && d < this.perception) {
@@ -67,7 +46,6 @@ class Boid {
     let total = 0;
 
     for (let b of boids) {
-      boidUpdates++;
       let other = b.userData;
       let d = other.pos.dist(this.pos)
       if (other != this && d < this.perception) {
@@ -91,7 +69,6 @@ class Boid {
     let steering = createVector();
     let total = 0;
     for (let b of boids) {
-      boidUpdates++;
       let other = b.userData;
       let d = other.pos.dist(this.pos)
       if (other != this && d < this.perception / 4) {
@@ -106,7 +83,7 @@ class Boid {
       steering.setMag(this.maxSpeed);
       steering.sub(this.vel);
 
-      steering.limit(this.maxForce * 1.15);
+      steering.limit(this.maxForce * 1.5);
     }
     return steering;
 
@@ -160,7 +137,7 @@ class Boid {
       let intersect = ray.intersect(p, false);
       if (!p.bounds(ray.p)) {
         this.heading_for_collision = true;
-       // ray.show()
+        ray.show()
         
       } else {
         this.heading_for_collision = false;
@@ -184,13 +161,15 @@ avoidence should find a vector based on the dot product of the plane intersectio
     let vectors = this.pointCloud;
     let evaluated = false; // Evaluated 
     let total = 0;
-    let list_of_vs = [];
     for (let v of vectors) {
-      evaluated = false
-      let ray = new Ray(this.pos, v)
-      boidUpdates++;
+      evaluated = false;
+      let g = this.vel.copy()
+      g.normalize()
+      let t = p5.Vector.add(v,g)
+      let ray = new Ray(this.pos, t)
+      //ray.show()
       for (let p of planes) {
-        boidUpdates++;
+
         let intersect = ray.intersect(p);
         let Dot = p5.Vector.dot(p.normal,ray.dir)
         if (intersect.bool) {
@@ -200,7 +179,7 @@ avoidence should find a vector based on the dot product of the plane intersectio
           }
         } else if (!evaluated && p.bounds(ray.p) && (Dot < 0.9 && Dot > 0.4 || Dot < -0.4 && Dot > -0.9) ) {
           evaluated = true
-          //ray.show()
+          ray.show()
           steering.add(v);
           total++;
         }
@@ -208,7 +187,7 @@ avoidence should find a vector based on the dot product of the plane intersectio
           let dir = p5.Vector.sub(createVector(300,300,300),this.pos)
           dir.normalize()
           steering.add(dir)
-          steering.setMag(this.maxSpeed);
+          steering.setMag(this.maxSpeed*20);
           steering.limit(this.maxForce);
           return steering
         }
@@ -241,8 +220,7 @@ avoidence should find a vector based on the dot product of the plane intersectio
     let filteredBoids = ot.query(range);
     if (filteredBoids.length > 1) {
       //print(this.grouped)
-      this.grouped = true;
-     
+      this.grouped = true;  
     } else {
       this.grouped = false;
     }
@@ -250,17 +228,13 @@ avoidence should find a vector based on the dot product of the plane intersectio
     let alignment = this.align(filteredBoids);
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
-    let collection = this.collection(filteredBoids);
-    // let avoidence;
-    // if (this.athis.awareness(planeArray);wareness(planeArray)) {
+    //let collection = this.collection(filteredBoids);
     
-    // }
-    if (this.leader || !this.grouped){
     this.awareness(planeArray)
-    }
-    this.acc.add(alignment);
-    this.acc.add(cohesion);
-    this.acc.add(seperation);
+    
+    // this.acc.add(alignment);
+    // this.acc.add(cohesion);
+    // this.acc.add(seperation);
     if (this.heading_for_collision) {
       if (!this.grouped || this.leader)
         this.acc.add(this.avoidence(planeArray))
