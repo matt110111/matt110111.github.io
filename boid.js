@@ -184,13 +184,13 @@ class Boid {
     let vectors = this.pointCloud;
     let evaluated = false; // Evaluated 
     let total = 0;
-    let list_of_vs = [];
+
     for (let v of vectors) {
       evaluated = false
       let ray = new Ray(this.pos, v)
-      boidUpdates++;
+      ray.show()
       for (let p of planes) {
-        boidUpdates++;
+   
         let intersect = ray.intersect(p);
         let Dot = p5.Vector.dot(this.vel, ray.dir)
         if (intersect.bool) {
@@ -240,7 +240,6 @@ class Boid {
 
     let filteredBoids = ot.query(range);
     if (filteredBoids.length > 1) {
-      //print(this.grouped)
     }
       let alignment = this.align(filteredBoids);
       let cohesion = this.cohesion(filteredBoids);
