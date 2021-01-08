@@ -12,6 +12,7 @@ class Plane {
 
     this.normal = createVector(this.A, this.B, this.C);
     this.normal.normalize();
+    this.distance = -(p5.Vector.dot(this.normal,this.b))
 
   }
   bounds(points) {

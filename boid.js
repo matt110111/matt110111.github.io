@@ -4,7 +4,7 @@ class Boid {
     this.pos = createVector(random(width), random(height), random(height));
     this.vel = p5.Vector.random3D();
 
-    this.vel = createVector(10, 0, 0);
+    //this.vel = createVector(10, 0, 0);
     this.vel.setMag(random(-4, 4));
     this.grouped = false;
     this.acc = createVector();
@@ -127,27 +127,37 @@ class Boid {
 
   awareness(planes) {
     let ray = new Ray(this.pos, this.vel, this.perception);
-
+    let test = false
+    let closest = createVector(2000,2000)
+    let intersection = null;
     for (let p of planes) {
-      let intersect = ray.intersect(p, false);
-      if (!p.bounds(ray.p)) {   
-          ray.show(true)
-        }
-      else{
-          ray.show()
-        }
-
+      //print(p)
+      
+      intersection = ray.intersect(ray.pos,ray.dir,Plane=p)
+      if (intersection.bool){
+        
+        if (p5.Vector.dist(ray.pos,intersection.value)< p5.Vector.dist(ray.pos,closest)){
+          closest = intersection.value
+      }
     }
   }
+  if (closest.x != 2000){
+        push()
+        stroke(0)
+        line(this.pos.x,this.pos.y,this.pos.z,closest.x,closest.y,closest.z)
+        pop()
+  }
 
-//Avoidence create internal variable denoting that a boid is heading for collision pick a random direction thats free.
-/*
-avoidence should find a vector based on the dot product of the plane intersection and the normal
---Plane 
---Dot of Plane selected && ray direction
+  }
 
---Coner and edge of plane detection.
-*/
+  //Avoidence create internal variable denoting that a boid is heading for collision pick a random direction thats free.
+  /*
+  avoidence should find a vector based on the dot product of the plane intersection and the normal
+  --Plane 
+  --Dot of Plane selected && ray direction
+
+  --Coner and edge of plane detection.
+  */
 
 
   avoidence(planes) {
@@ -160,28 +170,28 @@ avoidence should find a vector based on the dot product of the plane intersectio
       let g = this.vel.copy()
       g.normalize()
       p.show()
-      let t = p5.Vector.add(v,g)
+      let t = p5.Vector.add(v, g)
       let ray = new Ray(this.pos, t)
       for (let p of planes) {
 
         let intersect = ray.intersect(p);
-        let Dot = p5.Vector.dot(p.normal,ray.dir)
+        let Dot = p5.Vector.dot(p.normal, ray.dir)
         if (intersect.bool) {
           let distance = p5.Vector.dist(ray.pos, intersect.value)
           if (distance < this.perception && p.bounds(intersect.value) && !evaluated) {
             evaluated = true
           }
-        } else if (!evaluated && p.bounds(ray.p) && (Dot < 0.9 && Dot > 0.4 || Dot < -0.4 && Dot > -0.9) ) {
+        } else if (!evaluated && p.bounds(ray.p) && (Dot < 0.9 && Dot > 0.4 || Dot < -0.4 && Dot > -0.9)) {
           evaluated = true
           ray.show()
           steering.add(v);
           total++;
         }
-        if(!p.bounds(this.pos)){
-          let dir = p5.Vector.sub(createVector(300,300,300),this.pos)
+        if (!p.bounds(this.pos)) {
+          let dir = p5.Vector.sub(createVector(300, 300, 300), this.pos)
           dir.normalize()
           steering.add(dir)
-          steering.setMag(this.maxSpeed*20);
+          steering.setMag(this.maxSpeed * 20);
           steering.limit(this.maxForce);
           return steering
         }
@@ -213,7 +223,7 @@ avoidence should find a vector based on the dot product of the plane intersectio
     let filteredBoids = ot.query(range);
     if (filteredBoids.length > 1) {
       //print(this.grouped)
-      this.grouped = true;  
+      this.grouped = true;
     } else {
       this.grouped = false;
     }
@@ -222,9 +232,9 @@ avoidence should find a vector based on the dot product of the plane intersectio
     let cohesion = this.cohesion(filteredBoids);
     let seperation = this.seperation(filteredBoids);
     //let collection = this.collection(filteredBoids);
-    
+
     this.awareness(planeArray)
-  
+
     this.acc.add(alignment);
     this.acc.add(cohesion);
     this.acc.add(seperation);
@@ -242,7 +252,7 @@ avoidence should find a vector based on the dot product of the plane intersectio
     push();
     translate(this.pos.x, this.pos.y, this.pos.z);
     noStroke();
-    fill(255, 255, 0);
+    fill(110, 255, 110);
     sphere(3);
     pop();
 

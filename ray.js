@@ -3,7 +3,7 @@
 class Ray {
   constructor(v, d, length) {
     this.pos = v;
-    this.length = length || 50;  //default 50px
+    this.length = length || 50; //default 50px
     //Below code. Refactor, included this for otimizing the collision system to use one Ray when the boid is in flight 
     this.dir = d.copy();
     this.dir = this.dir.normalize()
@@ -12,25 +12,39 @@ class Ray {
 
   }
   //Very messy, simply resolving if the ray object will collide with the Plane if it will where the intersection will occur.
-    //Sub feature, if there is no intersection, return dot product of the ray and the Plane to resolve the the angle of seperation.
-  intersect(Plane, pos = true, epsilon=1e-6) {
+  //Sub feature, if there is no intersection, return dot product of the ray and the Plane to resolve the the angle of seperation.
+  intersect(origin = this.pos.copy(), direction = this.dir.copy, Plane) {
+    var denom = p5.Vector.dot(direction, Plane.normal)
+    if (denom !== 0) {
+      //print(denom)
+      var t = -(p5.Vector.dot(origin, Plane.normal) + Plane.distance) / denom
 
-      let ndotu = Plane.normal.dot(this.dir)
-      if (abs(ndotu) < epsilon){
+      if (t < 0) {
         return {
           bool: false,
-          value: undefined
+          value: null
         }
       }
-      let w = p5.Vector.sub(ray.pos,Plane.a)
-      let si = -(Plane.normal.dot(w) / ndotu)
-      let Psi = (p5.Vector.mult(ray.dir,si)
-      let Psi 
+      let outPut = p5.Vector.mult(direction, t)
+      //console.log(p5.Vector.add(origin, outPut).copy())
       return {
         bool: true,
-        value: c
+        value: p5.Vector.add(origin, outPut).copy()
+      }
+
+    } else if (p5.Vector.dot(Plane.normal, origin) + Plane.distance === 0) {
+      return {
+        bool: true,
+        value: origin.copy()
+      }
+    } else {
+      return {
+        bool: false,
+        value: null
       }
     }
+  }
+
   //Debug code.
   show(collided) {
 
