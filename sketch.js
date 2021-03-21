@@ -101,24 +101,6 @@ function subdivisionCheck() {
   }
 }
 
-// function generatePointCloud() {
-//   let viewDensity = 21;
-//   let Array = []
-//   let goldenRatio = (1 + sqrt(5)) / 2;
-//   let angleIncrement = PI * 2 * goldenRatio;
-//   for (let i = 0; i < viewDensity; i++) {
-//     let t = i / viewDensity;
-//     let inclination = acos(1 - 2 * t);
-//     let azimuth = angleIncrement * i;
-//     let x = sin(inclination) * cos(azimuth);
-//     let y = sin(inclination) * sin(azimuth);
-//     let z = cos(inclination);
-//     let nP = createVector(x, y, z);
-//     nP.normalize();
-//     Array.push(nP)
-//   }
-//   return Array;
-// }
 
 function generatePointCloud() {
   let Array = []
